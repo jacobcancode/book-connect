@@ -1,101 +1,40 @@
 ---
-layout: page 
+layout: base
 title: Login
 permalink: /login
 search_exclude: true
 menu: nav/home.html
-show_reading_time: false 
 ---
 
-<style>
-.login-container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap; /* allows the cards to wrap onto the next line if the screen is too small */
-}
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+  </div>
 
-.login-card {
-    margin-top: 0; /* remove the top margin */
-    width: 45%;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    margin-bottom: 20px;
-    overflow-x: auto; /* Enable horizontal scrolling */
-}
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form class="space-y-6" id="pythonForm" onsubmit="pythonLogin(); return false;">
+      <div>
+        <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
+        <div class="mt-2">
+          <input type="text" name="username" id="username" autocomplete="username" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-rose-600 sm:text-sm/6">
+        </div>
+      </div>
 
-.login-card h1 {
-    margin-bottom: 20px;
-}
+      <div>
+        <div class="flex items-center justify-between">
+          <label type="password" name="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
+        </div>
+        <div class="mt-2">
+          <input type="password" name="password" id="password" autocomplete="current-password" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-rose-600 sm:text-sm/6">
+        </div>
+      </div>
 
-.signup-card {
-    margin-top: 0; /* remove the top margin */
-    width: 45%;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    margin-bottom: 20px;
-    overflow-x: auto; /* Enable horizontal scrolling */
-}
-
-.signup-card h1 {
-    margin-bottom: 20px;
-}
-
-</style>
-
-<div class="login-container">
-    <!-- Python Login Form -->
-    <div class="login-card">
-        <h1 id="pythonTitle">User Login (Python/Flask)</h1>
-        <form id="pythonForm" onsubmit="pythonLogin(); return false;">
-            <p>
-                <label>
-                    GitHub ID:
-                    <input type="text" name="uid" id="uid" required>
-                </label>
-            </p>
-            <p>
-                <label>
-                    Password:
-                    <input type="password" name="password" id="password" required>
-                </label>
-            </p>
-            <p>
-                <button type="submit">Login</button>
-            </p>
-            <p id="message" style="color: red;"></p>
-        </form>
-    </div>
-    <div class="signup-card">
-        <h1 id="signupTitle">Sign Up</h1>
-        <form id="signupForm" onsubmit="signup(); return false;">
-            <p>
-                <label>
-                    Name:
-                    <input type="text" name="name" id="name" required>
-                </label>
-            </p>
-            <p>
-                <label>
-                    GitHub ID:
-                    <input type="text" name="signupUid" id="signupUid" required>
-                </label>
-            </p>
-            <p>
-                <label>
-                    Password:
-                    <input type="password" name="signupPassword" id="signupPassword" required>
-                </label>
-            </p>
-            <p>
-                <button type="submit">Sign Up</button>
-            </p>
-            <p id="signupMessage" style="color: green;"></p>
-        </form>
-    </div>
+      <div>
+        <button type="submit" class="flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">Sign in</button>
+      </div>
+      <p id="message" class="text-rose-600"></p>
+    </form>
+  </div>
 </div>
 
 <script type="module">
@@ -110,7 +49,7 @@ show_reading_time: false
             method: "POST",
             cache: "no-cache",
             body: {
-                uid: document.getElementById("uid").value,
+                uid: document.getElementById("username").value,
                 password: document.getElementById("password").value,
             }
         };
@@ -131,7 +70,7 @@ show_reading_time: false
             cache: "no-cache",
             body: {
                 name: document.getElementById("name").value,
-                uid: document.getElementById("signupUid").value,
+                username: document.getElementById("signupUsername").value,
                 password: document.getElementById("signupPassword").value,
             }
         };
