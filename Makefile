@@ -1,6 +1,6 @@
 # Configuration, override port with usage: make PORT=4200
 PORT ?= 4887
-REPO_NAME ?= flocker_frontend 
+REPO_NAME ?= personal_flocker_frontend
 LOG_FILE = /tmp/jekyll$(PORT).log
 
 SHELL = /bin/bash -c
@@ -17,9 +17,6 @@ CSP_NOTEBOOK_FILES := $(shell find _notebooks/CSP -name '*.ipynb')
 DESTINATION_DIRECTORY = _posts
 MARKDOWN_FILES := $(patsubst _notebooks/%.ipynb,$(DESTINATION_DIRECTORY)/%_IPYNB_2_.md,$(NOTEBOOK_FILES))
 CSP_MARKDOWN_FILES := $(patsubst _notebooks/CSP/%.ipynb,$(DESTINATION_DIRECTORY)/%_IPYNB_2_.md,$(CSP_NOTEBOOK_FILES))
-
-# Call server, then verify and start logging
-# ...
 
 # Call server, then verify and start logging
 default: server
@@ -53,48 +50,8 @@ default: server
 	@# outputs startup log, removes last line ($$d) as ctl-c message is not applicable for background process
 	@sed '$$d' $(LOG_FILE)
 
-csp: cspserver
-	@echo "ONLY COMPILED CSP CONTENT"
-	@echo "Terminal logging starting, watching server..."
-	@# tail and awk work together to extract Jekyll regeneration messages
-	@# When a _notebook is detected in the log, call make convert in the background
-	@# Note: We use the "if ($$0 ~ /_notebooks\/.*\.ipynb/) { system(\"make convert &\") }" to call make convert
-	@(tail -f $(LOG_FILE) | awk '/Server address: http:\/\/127.0.0.1:$(PORT)\/$(REPO_NAME)\// { serverReady=1 } \
-	serverReady && /^ *Regenerating:/ { regenerate=1 } \
-	regenerate { \
-		if (/^[[:blank:]]*$$/) { regenerate=0 } \
-		else { \
-			print; \
-			if ($$0 ~ /_notebooks\/CSP\/.*\.ipynb/) { system("make convert &") } \
-		} \
-	}') 2>/dev/null &
-	@# start an infinite loop with timeout to check log status
-	@for ((COUNTER = 0; ; COUNTER++)); do \
-		if grep -q "Server address:" $(LOG_FILE); then \
-			echo "Server started in $$COUNTER seconds"; \
-			break; \
-		fi; \
-		if [ $$COUNTER -eq 60 ]; then \
-			echo "Server timed out after $$COUNTER seconds."; \
-			echo "Review errors from $(LOG_FILE)."; \
-			cat $(LOG_FILE); \
-			exit 1; \
-		fi; \
-		sleep 1; \
-	done
-	@# outputs startup log, removes last line ($$d) as ctl-c message is not applicable for background process
-	@sed '$$d' $(LOG_FILE)
-
-
 # Start the local web server
 server: stop convert
-	@echo "Starting server..."
-	@@nohup bundle exec jekyll serve -H 127.0.0.1 -P $(PORT) > $(LOG_FILE) 2>&1 & \
-		PID=$$!; \
-		echo "Server PID: $$PID"
-	@@until [ -f $(LOG_FILE) ]; do sleep 1; done
-
-cspserver: stop cspconvert
 	@echo "Starting server..."
 	@@nohup bundle exec jekyll serve -H 127.0.0.1 -P $(PORT) > $(LOG_FILE) 2>&1 & \
 		PID=$$!; \
@@ -107,11 +64,6 @@ cspconvert: $(CSP_MARKDOWN_FILES)
 
 # Convert .ipynb files to Markdown with front matter, preserving directory structure
 $(DESTINATION_DIRECTORY)/%_IPYNB_2_.md: _notebooks/%.ipynb
-	@echo "Converting source $< to destination $@"
-	@mkdir -p $(@D)
-	@python3 -c 'import sys; from scripts.convert_notebooks import convert_single_notebook; convert_single_notebook(sys.argv[1])' "$<"
-
-$(DESTINATION_DIRECTORY)/%_IPYNB_2_.md: _notebooks/CSP/%.ipynb
 	@echo "Converting source $< to destination $@"
 	@mkdir -p $(@D)
 	@python3 -c 'import sys; from scripts.convert_notebooks import convert_single_notebook; convert_single_notebook(sys.argv[1])' "$<"
