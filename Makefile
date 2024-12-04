@@ -70,14 +70,16 @@ $(DESTINATION_DIRECTORY)/%_IPYNB_2_.md: _notebooks/%.ipynb
 
 # Clean up project derived files, to avoid run issues stop is dependency
 clean: stop
-	@echo "Cleaning converted IPYNB files..."
-	@find _posts -type f -name '*_IPYNB_2_.md' -exec rm {} +
-	@echo "Cleaning Github Issue files..."
-	@find _posts -type f -name '*_GithubIssue_.md' -exec rm {} +
-	@echo "Removing empty directories in _posts..."
-	@while [ $$(find _posts -type d -empty | wc -l) -gt 0 ]; do \
-		find _posts -type d -empty -exec rmdir {} +; \
-	done
+	@if [ -d "_posts" ]; then \
+	  echo "Cleaning converted IPYNB files..."; \
+	  find _posts -type f -name '*_IPYNB_2_.md' -exec rm {} +; \
+	  echo "Cleaning Github Issue files..."; \
+	  find _posts -type f -name '*_GithubIssue_.md' -exec rm {} +; \
+	  echo "Removing empty directories in _posts..."; \
+	  while [ $$(find _posts -type d -empty | wc -l) -gt 0 ]; do \
+	    find _posts -type d -empty     -exec rmdir {} +; \
+		done; \
+	fi
 	@echo "Removing _site directory..."
 	@rm -rf _site
 
