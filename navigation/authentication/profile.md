@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: needsAuth
 title: Profile Settings
 permalink: /profile
 menu: nav/home.html
