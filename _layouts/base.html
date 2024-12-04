@@ -1,17 +1,10 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang='{{ page.lang | default: site.lang | default: "en" }}'>
-
-<!-- Look in _includes/theme for <head> and <body> definitions -->
-{% if site.remote_theme contains 'minima' %}
-  {%- include theme/minima/base.html -%}
-{% elsif site.remote_theme contains 'midnight' %}
-  {%- include theme/midnight/base.html -%}
-{% elsif site.remote_theme contains 'dinky' %}
-  {%- include theme/dinky/base.html -%}
-{% elsif site.remote_theme contains 'time-machine' %}
-  {%- include theme/time-machine/base.html -%}
-{% elsif site.remote_theme contains 'cayman' %}
-  {%- include theme/cayman/base.html -%}
-{% endif %}
+    {%- if page.menu -%} {% include {{page.menu}} html=content %} {%- endif -%}
+    <body>
+        <main class="page-content" aria-label="Content">
+            <div class="wrapper bg-white">{{ content }}</div>
+        </main>
+    </body>
+    <script src="https://cdn.tailwindcss.com"></script>
 </html>
