@@ -129,7 +129,7 @@ menu: nav/home.html
 
 <!-- Call-to-Action Section -->
 <section id="cta" class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-red-600 to-rose-600 text-white">
-        <h2 class="text-7xl font-bold mb-6 fade-in">Join the Legendary Motorsport Community</h2>
+        <h2 class="tracking-tighter text-7xl font-bold mb-6 fade-in">Join the Legendary Motorsport Community</h2>
         <p class="text-3xl max-w-4xl text-center mb-8 fade-in">
             Connect with car enthusiasts from around the world, share your experiences, and explore amazing content about cars!
         </p>
