@@ -1,9 +1,11 @@
 <header
-    class="z-10 sticky w-full top-0 flex bg-white justify-center p-4 drop-shadow"
+    class="z-10 sticky justify-items-center w-full top-0 grid grid-cols-5 bg-white justify-center p-4 drop-shadow"
 >
-    <div class="flex gap-x-12 pr-12 mt-3" id="link-bar-1">
+    <div class="col-span-2 flex gap-x-12 mt-3 justify-self-end" id="link-bar-1">
         <a href="#" class="text-sm/6 font-semibold text-gray-900">Dream Car</a>
-        <a href="hybrid.md" class="text-sm/6 font-semibold text-gray-900">Hybrid</a>
+        <a href="hybrid.md" class="text-sm/6 font-semibold text-gray-900"
+            >Hybrid</a
+        >
     </div>
     <div class="p-2" id="home-btn">
         <a href="{{site.baseurl}}/" class="text-sm/6 font-bold text-rose-600"
@@ -39,8 +41,16 @@
                 </g></svg
         ></a>
     </div>
-    <div class="flex gap-x-12 pl-12 mt-3" id="link-bar-2">
+    <div
+        class="col-span-2 flex gap-x-12 mt-3 justify-self-start"
+        id="link-bar-2"
+    >
         <a href="#" class="text-sm/6 font-semibold text-gray-900">Electric</a>
         <a href="#" class="text-sm/6 font-semibold text-gray-900">Gas</a>
+        <a
+            href="{{site.baseurl}}/noauth"
+            class="hover:drop-shadow-xl z-10 right-6 absolute bg-gradient-to-r from-rose-400 to-rose-700 bg-clip-text font-extrabold text-transparent tracking-tight"
+            >LOGIN</a
+        >
     </div>
 </header>
