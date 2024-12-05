@@ -38,20 +38,20 @@ menu: nav/home.html
 </head>
 <body class="bg-gray-100 text-gray-900 relative">
 
-    <!-- Background Animation -->
-    <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+ <!-- Background Animation -->
+<div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
         <div class="bg-gradient-to-r from-gray-900 via-gray-800 to-black w-full h-full opacity-50 animate-gradient"></div>
     </div>
 
-    <!-- Welcome Section -->
-    <section id="welcome" class="h-screen flex items-center justify-center text-center bg-gray-900 text-white">
+<!-- Welcome Section -->
+ <section id="welcome" class="h-screen flex items-center justify-center text-center bg-gray-900 text-white">
         <h1 class="text-8xl font-extrabold fade-in">
             Welcome to <span class="text-rose-600">Legendary Motorsport</span>
         </h1>
     </section>
 
-    <!-- About Us Section -->
-    <section id="about" class="h-screen flex flex-col items-center justify-center text-center">
+<!-- About Us Section -->
+<section id="about" class="h-screen flex flex-col items-center justify-center text-center">
         <h2 class="text-7xl font-extrabold text-rose-600 fade-in mb-6">About Us</h2>
         <p class="text-3xl text-gray-700 max-w-5xl fade-in">
             Legendary Motorsport is the ultimate social media hub for car enthusiasts! Whether you're looking to share
@@ -60,8 +60,8 @@ menu: nav/home.html
         </p>
     </section>
 
-    <!-- Our Mission Section -->
-    <section id="mission" class="h-screen flex flex-col items-center justify-center text-center bg-gray-200">
+<!-- Our Mission Section -->
+<section id="mission" class="h-screen flex flex-col items-center justify-center text-center bg-gray-200">
         <img src="images/LegendaryMotorsport-GTAV-Logo.png" 
             alt="Legendary Motorsport Logo" 
             class="h-96 w-auto fade-in">
@@ -73,26 +73,26 @@ menu: nav/home.html
         </p>
     </section>
 
-    <!-- Featured Cars Section -->
-    <section id="featured-cars" class="py-20 bg-gray-100">
+ <!-- Featured Cars Section -->
+ <section id="featured-cars" class="py-20 bg-gray-100">
         <h2 class="text-7xl font-bold text-center text-red-600 mb-10 fade-in">Featured Cars</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 container mx-auto fade-in">
             <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
-                <img src="images/gas-car.jpg" alt="Gas Car" class="w-full h-64 object-cover">
+                <img src="images/images (1).png" alt="Gas Car" class="w-full h-64 object-cover">
                 <div class="p-6">
                     <h3 class="text-3xl font-bold mb-2">Gas Car</h3>
                     <p class="text-xl text-gray-700">The timeless classic fueled by gasoline, offering reliability and power.</p>
                 </div>
             </div>
             <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
-                <img src="images/hybrid-car.jpg" alt="Hybrid Car" class="w-full h-64 object-cover">
+                <img src="images/5f5f966f7ed0ee001e25f20e.png" alt="Hybrid Car" class="w-full h-64 object-cover">
                 <div class="p-6">
                     <h3 class="text-3xl font-bold mb-2">Hybrid Car</h3>
                     <p class="text-xl text-gray-700">A perfect blend of fuel efficiency and eco-friendliness.</p>
                 </div>
             </div>
             <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
-                <img src="images/electric-car.jpg" alt="Electric Car" class="w-full h-64 object-cover">
+                <img src="images/Tesla-Model-S-Ultra-Red-2023.jpg" alt="Electric Car" class="w-full h-64 object-cover">
                 <div class="p-6">
                     <h3 class="text-3xl font-bold mb-2">Electric Car</h3>
                     <p class="text-xl text-gray-700">The future of transportation, powered by clean and sustainable energy.</p>
@@ -108,8 +108,8 @@ menu: nav/home.html
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="py-20 bg-gray-900 text-white">
+ <!-- Testimonials Section -->
+<section id="testimonials" class="py-20 bg-gray-900 text-white">
         <h2 class="text-7xl font-bold text-center mb-10 fade-in">What Our Users Say</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 container mx-auto fade-in">
             <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
@@ -127,8 +127,8 @@ menu: nav/home.html
         </div>
     </section>
 
-    <!-- Call-to-Action Section -->
-    <section id="cta" class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-red-600 to-rose-600 text-white">
+<!-- Call-to-Action Section -->
+<section id="cta" class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-red-600 to-rose-600 text-white">
         <h2 class="text-7xl font-bold mb-6 fade-in">Join the Legendary Motorsport Community</h2>
         <p class="text-3xl max-w-4xl text-center mb-8 fade-in">
             Connect with car enthusiasts from around the world, share your experiences, and explore amazing content about cars!
@@ -138,8 +138,8 @@ menu: nav/home.html
         </a>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
+ <!-- Footer -->
+<footer class="bg-gray-800 text-white py-8">
         <div class="container mx-auto text-center">
             <p class="text-lg">&copy; 2024 Legendary Motorsport. All rights reserved.</p>
             <div class="mt-4">
@@ -150,8 +150,9 @@ menu: nav/home.html
         </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script>
+ <!-- JavaScript -->
+
+ <script>
         // JavaScript to handle fade-in effect on scroll
         const fadeInElements = document.querySelectorAll('.fade-in');
 
