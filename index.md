@@ -55,15 +55,15 @@ menu: nav/home.html
         <h2 class="text-7xl font-extrabold text-rose-600 fade-in mb-6">About Us</h2>
         <p class="text-3xl text-gray-700 max-w-5xl fade-in">
             Legendary Motorsport is the ultimate social media hub for car enthusiasts! Whether you're looking to share
-            your experiences, troubleshoot car issues, or showcase stunning photos of your vehicle, our platform is here 
+            your experiences, troubleshoot car issues, or showcase stunning photos of your vehicle, our platform is here
             for you. We aim to connect gearheads, provide solutions, and celebrate the love of cars.
         </p>
     </section>
 
 <!-- Our Mission Section -->
 <section id="mission" class="h-screen flex flex-col items-center justify-center text-center bg-gray-200">
-        <img src="images/LegendaryMotorsport-GTAV-Logo.png" 
-            alt="Legendary Motorsport Logo" 
+        <img src="images/LegendaryMotorsport-GTAV-Logo.png"
+            alt="Legendary Motorsport Logo"
             class="h-96 w-auto fade-in">
         <h3 class="text-6xl font-bold mt-8 text-gray-900 fade-in">Our Mission</h3>
         <p class="text-3xl text-gray-700 mt-4 max-w-5xl fade-in">
@@ -133,42 +133,9 @@ menu: nav/home.html
         <p class="text-3xl max-w-4xl text-center mb-8 fade-in">
             Connect with car enthusiasts from around the world, share your experiences, and explore amazing content about cars!
         </p>
-        <a href="#signup" class="bg-white text-red-600 text-3xl px-8 py-4 rounded-lg shadow-lg font-bold transition-transform transform hover:scale-110 fade-in">
+        <a href="{{site.baseurl}}/noauth" class="bg-white text-red-600 text-3xl px-8 py-4 rounded-lg shadow-lg font-bold transition-transform transform hover:scale-110 fade-in">
             Get Started Now
         </a>
     </section>
-
- <!-- Footer -->
-<footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto text-center">
-            <p class="text-lg">&copy; 2024 Legendary Motorsport. All rights reserved.</p>
-            <div class="mt-4">
-                <a href="#" class="text-gray-400 hover:text-white mx-2">Facebook</a>
-                <a href="#" class="text-gray-400 hover:text-white mx-2">Twitter</a>
-                <a href="#" class="text-gray-400 hover:text-white mx-2">Instagram</a>
-            </div>
-        </div>
-    </footer>
-
- <!-- JavaScript -->
-
- <script>
-        // JavaScript to handle fade-in effect on scroll
-        const fadeInElements = document.querySelectorAll('.fade-in');
-
-        const handleScroll = () => {
-            fadeInElements.forEach(el => {
-                const rect = el.getBoundingClientRect();
-                if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
-                    el.classList.add('visible');
-                } else {
-                    el.classList.remove('visible');
-                }
-            });
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('load', handleScroll); // Trigger on page load
-    </script>
 </body>
 </html>
