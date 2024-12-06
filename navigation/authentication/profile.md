@@ -378,3 +378,195 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 </script>
 
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Ignition Unlock</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+        }
+
+        /* Lock Screen */
+        .lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            background: radial-gradient(circle, #333, #000);
+            transition: transform 1s ease-in-out;
+        }
+
+        /* Ignition */
+        .ignition-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .ignition {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #555, #222);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: inset 0 0 10px #000, 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .ignition-slot {
+            width: 60px;
+            height: 20px;
+            background: #777;
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Key */
+        .key {
+            width: 100px;
+            height: auto;
+            position: absolute;
+            top: 75%;
+            left: 10%;
+            cursor: grab;
+            transition: transform 0.5s ease;
+        }
+
+        .key:active {
+            cursor: grabbing;
+        }
+
+        .instruction {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #bbb;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Page Content */
+        .content {
+            width: 100%;
+            min-height: 100vh;
+            padding: 40px;
+            background: linear-gradient(to bottom, #333, #000);
+            color: white;
+            position: fixed;
+            top: 100vh;
+            left: 0;
+            z-index: 5;
+            overflow-y: auto;
+            transition: transform 1s ease-in-out;
+        }
+
+        .content h1 {
+            margin-bottom: 20px;
+            font-size: 36px;
+        }
+
+        .content p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Lock Screen -->
+    <div class="lock-screen" id="lockScreen">
+        <div class="ignition-container">
+            <div class="ignition">
+                <div class="ignition-slot" id="ignitionSlot"></div>
+            </div>
+        </div>
+        <img src="{{site.baseurl}}/images/CARKEY.png" alt="Key" class="key" id="key">
+        <div class="instruction">Drag the key into the ignition to unlock!</div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="content" id="content">
+        <h1>Welcome to the Garage!</h1>
+        <p>Start your engines and explore a world of cars, customizations, and more. You've unlocked the page with style!</p>
+        <p>Scroll down to see the latest updates, car reviews, and tips for car enthusiasts. Enjoy the ride!</p>
+    </div>
+
+    <script>
+        const key = document.getElementById('key');
+        const ignitionSlot = document.getElementById('ignitionSlot');
+        const lockScreen = document.getElementById('lockScreen');
+        const content = document.getElementById('content');
+
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        // Dragging functionality
+        key.addEventListener('mousedown', (event) => {
+            isDragging = true;
+            offsetX = event.offsetX;
+            offsetY = event.offsetY;
+        });
+
+        document.addEventListener('mousemove', (event) => {
+            if (isDragging) {
+                key.style.left = `${event.clientX - offsetX}px`;
+                key.style.top = `${event.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', (event) => {
+            if (isDragging) {
+                isDragging = false;
+
+                // Check if key is near ignition slot
+                const keyRect = key.getBoundingClientRect();
+                const ignitionSlotRect = ignitionSlot.getBoundingClientRect();
+
+                if (
+                    keyRect.right > ignitionSlotRect.left &&
+                    keyRect.left < ignitionSlotRect.right &&
+                    keyRect.bottom > ignitionSlotRect.top &&
+                    keyRect.top < ignitionSlotRect.bottom
+                ) {
+                    // Snap key into ignition slot
+                    key.style.left = `${ignitionSlotRect.left - 50}px`;
+                    key.style.top = `${ignitionSlotRect.top - 10}px`;
+                    key.style.transform = 'rotate(90deg)';
+
+                    // Unlock animation
+                    setTimeout(() => {
+                        lockScreen.style.transform = 'translateY(-100vh)';
+                        content.style.transform = 'translateY(-100vh)';
+                    }, 1000); // Delay for animation
+                } else {
+                    // Reset key position if not near ignition slot
+                    key.style.left = '10%';
+                    key.style.top = '75%';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
