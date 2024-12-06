@@ -378,7 +378,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 </script>
 
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -390,7 +389,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             padding: 0;
             overflow: hidden;
             font-family: Arial, sans-serif;
-            background: #111;
+            background: #660000; /* Dark red background */
             color: white;
         }
 
@@ -406,7 +405,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             justify-content: center;
             align-items: center;
             z-index: 10;
-            background: radial-gradient(circle, #333, #000);
+            background: radial-gradient(circle, #772222, #330000); /* Dark red gradient */
             transition: transform 1s ease-in-out;
         }
 
@@ -431,7 +430,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         .ignition-slot {
             width: 60px;
-            height: 20px;
+            height: 20px; /* Smaller size */
             background: #777;
             border-radius: 5px;
             position: absolute;
@@ -443,17 +442,29 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         /* Key */
         .key {
-            width: 100px;
+            width: 200px; /* Larger size */
             height: auto;
             position: absolute;
-            top: 75%;
+            top: 70%;
             left: 10%;
             cursor: grab;
             transition: transform 0.5s ease;
+            z-index: 5;
         }
 
         .key:active {
             cursor: grabbing;
+        }
+
+        .key-top-view {
+            display: none;
+            position: absolute;
+            width: 60px; /* Matches ignition slot size */
+            height: 20px;
+            background: black;
+            border-radius: 3px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            z-index: 10;
         }
 
         .instruction {
@@ -500,6 +511,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         <div class="ignition-container">
             <div class="ignition">
                 <div class="ignition-slot" id="ignitionSlot"></div>
+                <div class="key-top-view" id="keyTopView"></div>
             </div>
         </div>
         <img src="{{site.baseurl}}/images/CARKEY.png" alt="Key" class="key" id="key">
@@ -513,20 +525,29 @@ document.addEventListener('DOMContentLoaded', async function () {
         <p>Scroll down to see the latest updates, car reviews, and tips for car enthusiasts. Enjoy the ride!</p>
     </div>
 
+    <!-- Car Starting Sound -->
+    <audio id="carStartSound" src="https://example.com/car-start.mp3"></audio>
+
     <script>
         const key = document.getElementById('key');
         const ignitionSlot = document.getElementById('ignitionSlot');
         const lockScreen = document.getElementById('lockScreen');
         const content = document.getElementById('content');
+        const keyTopView = document.getElementById('keyTopView');
+        const carStartSound = document.getElementById('carStartSound');
 
         let isDragging = false;
         let offsetX, offsetY;
+
+        // Prevent default drag behavior
+        key.addEventListener('dragstart', (event) => event.preventDefault());
 
         // Dragging functionality
         key.addEventListener('mousedown', (event) => {
             isDragging = true;
             offsetX = event.offsetX;
             offsetY = event.offsetY;
+            key.style.cursor = 'grabbing';
         });
 
         document.addEventListener('mousemove', (event) => {
@@ -539,31 +560,41 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.addEventListener('mouseup', (event) => {
             if (isDragging) {
                 isDragging = false;
+                key.style.cursor = 'grab';
 
-                // Check if key is near ignition slot
+                // Check if key is near the ignition slot
                 const keyRect = key.getBoundingClientRect();
-                const ignitionSlotRect = ignitionSlot.getBoundingClientRect();
+                const ignitionRect = ignitionSlot.getBoundingClientRect();
 
                 if (
-                    keyRect.right > ignitionSlotRect.left &&
-                    keyRect.left < ignitionSlotRect.right &&
-                    keyRect.bottom > ignitionSlotRect.top &&
-                    keyRect.top < ignitionSlotRect.bottom
+                    keyRect.right > ignitionRect.left &&
+                    keyRect.left < ignitionRect.right &&
+                    keyRect.bottom > ignitionRect.top &&
+                    keyRect.top < ignitionRect.bottom
                 ) {
-                    // Snap key into ignition slot
-                    key.style.left = `${ignitionSlotRect.left - 50}px`;
-                    key.style.top = `${ignitionSlotRect.top - 10}px`;
-                    key.style.transform = 'rotate(90deg)';
+                    // Hide original key and display top view
+                    key.style.display = 'none';
+                    keyTopView.style.display = 'block';
+                    keyTopView.style.left = `${ignitionRect.left}px`;
+                    keyTopView.style.top = `${ignitionRect.top}px`;
 
-                    // Unlock animation
+                    // Play car starting sound
+                    carStartSound.play();
+
+                    // Simulate turning the ignition
+                    setTimeout(() => {
+                        keyTopView.style.transform = 'rotate(90deg)';
+                    }, 500);
+
+                    // Unlock the page
                     setTimeout(() => {
                         lockScreen.style.transform = 'translateY(-100vh)';
                         content.style.transform = 'translateY(-100vh)';
-                    }, 1000); // Delay for animation
+                    }, 1500); // Delay for rotation and unlock animation
                 } else {
                     // Reset key position if not near ignition slot
                     key.style.left = '10%';
-                    key.style.top = '75%';
+                    key.style.top = '70%';
                 }
             }
         });
