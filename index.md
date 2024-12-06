@@ -106,24 +106,127 @@ menu: nav/home.html
         </div>
     </section>
 
- <!-- Testimonials Section -->
-<section id="testimonials" class="py-20 bg-gray-900 text-white">
-        <h2 class="text-7xl font-bold text-center mb-10 fade-in">What Our Users Say</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 container mx-auto fade-in">
-            <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
-                <p class="text-xl italic">"Legendary Motorsport is the best platform for car enthusiasts! I've learned so much and connected with amazing people."</p>
-                <h3 class="mt-4 font-bold text-lg">- Alex R.</h3>
+<!-- Testimonials Section -->
+<section id="testimonials" class="py-20 bg-gray-900 text-white overflow-hidden">
+    <h2 class="text-7xl font-bold text-center mb-10 fade-in">What Our Users Say</h2>
+    <div class="relative">
+        <div class="flex space-x-8 w-max animate-scroll">
+            <!-- Original Testimonials -->
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "Legendary Motorsport is the<br> 
+                    best platform for car enthusiasts!<br> 
+                    I've learned so much<br> 
+                    and connected with amazing people."
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Alex R.</h3>
             </div>
-            <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
-                <p class="text-xl italic">"A fantastic community where I can share my car photography and get great feedback."</p>
-                <h3 class="mt-4 font-bold text-lg">- Jamie T.</h3>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "A fantastic community where<br>
+                    I can share my car photography<br> 
+                    and get great feedback."
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Jamie T.</h3>
             </div>
-            <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
-                <p class="text-xl italic">"The forums have been super helpful for troubleshooting car problems. Highly recommended!"</p>
-                <h3 class="mt-4 font-bold text-lg">- Chris M.</h3>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "The forums have been super helpful<br>
+                    for troubleshooting car problems.<br> 
+                    Highly recommended!"
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Chris M.</h3>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "I’ve found my dream car<br>
+                    thanks to the resources<br>
+                    on this platform.<br> 
+                    Amazing work!"
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Taylor L.</h3>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "This community has been incredible<br>
+                    for finding advice on car parts."
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Morgan S.</h3>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "Every car lover needs to join<br>
+                    Legendary Motorsport.<br>
+                    It’s a game-changer."
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Riley D.</h3>
+            </div>
+            <!-- Duplicate Testimonials for Infinite Scroll -->
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "Legendary Motorsport is the<br> 
+                    best platform for car enthusiasts!<br> 
+                    I've learned so much<br> 
+                    and connected with amazing people."
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Alex R.</h3>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "A fantastic community where<br>
+                    I can share my car photography<br> 
+                    and get great feedback."
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Jamie T.</h3>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "The forums have been super helpful<br>
+                    for troubleshooting car problems.<br> 
+                    Highly recommended!"
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Chris M.</h3>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "I’ve found my dream car<br>
+                    thanks to the resources<br>
+                    on this platform.<br> 
+                    Amazing work!"
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Taylor L.</h3>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "This community has been incredible<br>
+                    for finding advice on car parts."
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Morgan S.</h3>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
+                <p class="text-3xl italic leading-relaxed">
+                    "Every car lover needs to join<br>
+                    Legendary Motorsport.<br>
+                    It’s a game-changer."
+                </p>
+                <h3 class="mt-6 font-bold text-xl">- Riley D.</h3>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+<style>
+    @keyframes scroll {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+    .animate-scroll {
+        animation: scroll 45s linear infinite;
+    }
+</style>
 
 <!-- Call-to-Action Section -->
 <section id="cta" class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-red-600 to-rose-600 text-white">
