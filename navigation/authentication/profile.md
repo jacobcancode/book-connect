@@ -392,8 +392,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             background: #660000; /* Dark red background */
             color: white;
         }
-
-        /* Lock Screen */
+   /* Lock Screen */
         .lock-screen {
             position: fixed;
             top: 0;
@@ -408,15 +407,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             background: radial-gradient(circle, #772222, #330000); /* Dark red gradient */
             transition: transform 1s ease-in-out;
         }
-
-        /* Ignition */
+    /* Ignition */
         .ignition-container {
             position: relative;
             width: 150px;
             height: 150px;
         }
-
-        .ignition {
+   .ignition {
             width: 100%;
             height: 100%;
             background: radial-gradient(circle, #555, #222);
@@ -427,8 +424,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             position: relative;
             box-shadow: inset 0 0 10px #000, 0 4px 10px rgba(0, 0, 0, 0.5);
         }
-
-        .ignition-slot {
+ .ignition-slot {
             width: 60px;
             height: 20px; /* Smaller size */
             background: #777;
@@ -439,8 +435,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             transform: translate(-50%, -50%);
             box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
         }
-
-        /* Key */
+  /* Key */
         .key {
             width: 200px; /* Larger size */
             height: auto;
@@ -451,12 +446,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             transition: transform 0.5s ease;
             z-index: 5;
         }
-
-        .key:active {
+   .key:active {
             cursor: grabbing;
         }
-
-        .key-top-view {
+  .key-top-view {
             display: none;
             position: absolute;
             width: 60px; /* Matches ignition slot size */
@@ -466,20 +459,17 @@ document.addEventListener('DOMContentLoaded', async function () {
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
             z-index: 10;
         }
-
-        .instruction {
+  .instruction {
             margin-top: 20px;
             font-size: 18px;
             color: #bbb;
             animation: pulse 1s infinite;
         }
-
-        @keyframes pulse {
+   @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-
-        /* Page Content */
+  /* Page Content */
         .content {
             width: 100%;
             min-height: 100vh;
@@ -493,13 +483,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             overflow-y: auto;
             transition: transform 1s ease-in-out;
         }
-
-        .content h1 {
+  .content h1 {
             margin-bottom: 20px;
             font-size: 36px;
         }
-
-        .content p {
+  .content p {
             font-size: 18px;
             line-height: 1.6;
         }
@@ -518,17 +506,17 @@ document.addEventListener('DOMContentLoaded', async function () {
         <div class="instruction">Drag the key into the ignition to unlock!</div>
     </div>
 
-    <!-- Page Content -->
-    <div class="content" id="content">
+ <!-- Page Content -->
+ <div class="content" id="content">
         <h1>Welcome to the Garage!</h1>
         <p>Start your engines and explore a world of cars, customizations, and more. You've unlocked the page with style!</p>
         <p>Scroll down to see the latest updates, car reviews, and tips for car enthusiasts. Enjoy the ride!</p>
     </div>
 
-    <!-- Car Starting Sound -->
-    <audio id="carStartSound" src="https://example.com/car-start.mp3"></audio>
+  <!-- Car Starting Sound -->
+ <audio id="carStartSound" src="https://example.com/car-start.mp3"></audio>
 
-    <script>
+  <script>
         const key = document.getElementById('key');
         const ignitionSlot = document.getElementById('ignitionSlot');
         const lockScreen = document.getElementById('lockScreen');
