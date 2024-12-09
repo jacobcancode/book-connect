@@ -96,13 +96,13 @@ menu: nav/home.html
                     <p class="text-xl text-gray-700">The future of transportation, powered by clean and sustainable energy.</p>
                 </div>
             </div>
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
+            <a href="{{site.baseurl}}/dream-car" class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
                 <img src="images/964355023c8621887c37e1fcc3c1dc3aa9-koeniggsegg-one1.2x.h473.w710.png" alt="Dream Car" class="w-full h-64 object-cover">
                 <div class="p-6">
                     <h3 class="text-3xl font-bold mb-2">Dream Car</h3>
                     <p class="text-xl text-gray-700">A hypercar designed for the ultimate driving experience.</p>
                 </div>
-            </div>
+            </a>
         </div>
     </section>
 
