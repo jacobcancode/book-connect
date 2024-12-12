@@ -30,6 +30,37 @@ menu: nav/home.html
 <script type="module">
   import { login, pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
+  // Load chat history from localStorage
+  function loadChatHistory() {
+    const chatContainer = document.getElementById("chat-container");
+    const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+    // Render messages from localStorage
+    chatHistory.forEach((message) => {
+      const messageDiv = document.createElement("div");
+      messageDiv.className = message.isBot
+        ? "bg-gray-200 text-gray-900 px-4 py-2 rounded-lg my-2"
+        : "bg-blue-100 text-gray-900 px-4 py-2 rounded-lg my-2";
+      messageDiv.textContent = message.text;
+      chatContainer.appendChild(messageDiv);
+    });
+
+    // Scroll to the latest message
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  // Save chat history to localStorage
+  function saveChatHistory(userInput, botResponse) {
+    const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+    // Save user and bot messages to localStorage
+    chatHistory.push({ text: userInput, isBot: false });
+    chatHistory.push({ text: botResponse, isBot: true });
+
+    // Update localStorage with new chat history
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+  }
+
   async function handleChat(event) {
     event.preventDefault(); // Prevent form submission
 
@@ -83,6 +114,9 @@ menu: nav/home.html
       botMessageDiv.textContent = data.model_response || "No response received.";
       chatContainer.appendChild(botMessageDiv);
 
+      // Save messages to localStorage
+      saveChatHistory(userInput, data.model_response || "No response received.");
+
     } catch (error) {
       console.error("Error:", error);
 
@@ -98,6 +132,9 @@ menu: nav/home.html
 
     return false;
   }
+
+  // Load chat history on page load
+  document.addEventListener("DOMContentLoaded", loadChatHistory);
 
   // Attach event listener to the form
   document.getElementById("chat-form").addEventListener("submit", handleChat);
