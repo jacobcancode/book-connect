@@ -24,6 +24,12 @@ menu: nav/home.html
         <button type="submit" class="flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">Send</button>
       </div>
     </form>
+    <!-- Clear History Button -->
+    <div class="mt-4">
+      <button id="clear-history" class="flex w-full justify-center rounded-md bg-gray-300 px-3 py-1.5 text-sm/6 font-semibold text-gray-900 shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400">
+        Clear History
+      </button>
+    </div>
   </div>
 </div>
 
@@ -133,9 +139,19 @@ menu: nav/home.html
     return false;
   }
 
+  // Clear chat history from UI and localStorage
+  function clearChatHistory() {
+    const chatContainer = document.getElementById("chat-container");
+    chatContainer.innerHTML = ''; // Clear chat container
+    localStorage.removeItem("chatHistory"); // Remove chat history from localStorage
+  }
+
   // Load chat history on page load
   document.addEventListener("DOMContentLoaded", loadChatHistory);
 
   // Attach event listener to the form
   document.getElementById("chat-form").addEventListener("submit", handleChat);
+
+  // Attach event listener to the clear history button
+  document.getElementById("clear-history").addEventListener("click", clearChatHistory);
 </script>
