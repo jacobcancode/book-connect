@@ -1,0 +1,104 @@
+---
+layout: base
+title: Test
+permalink: /test
+search_exclude: true
+menu: nav/home.html
+---
+
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Chatbot Interface</h2>
+  </div>
+
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <div id="chat-container" class="border rounded-md px-3 py-3 overflow-y-auto h-80 bg-gray-100"></div>
+    <form class="space-y-4 mt-4" id="chat-form">
+      <div>
+        <label for="user-input" class="block text-sm/6 font-medium text-gray-900">Your Message</label>
+        <div class="mt-2">
+          <input type="text" id="user-input" placeholder="Type your message here" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-rose-600 sm:text-sm/6">
+        </div>
+      </div>
+      <div>
+        <button type="submit" class="flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">Send</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  import { login, pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
+
+  async function handleChat(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const userInputField = document.getElementById("user-input");
+    const userInput = userInputField.value.trim();
+
+    if (!userInput) return false;
+
+    const chatContainer = document.getElementById("chat-container");
+
+    // Add user message to chat
+    const userMessageDiv = document.createElement("div");
+    userMessageDiv.className = "bg-blue-100 text-gray-900 px-4 py-2 rounded-lg my-2";
+    userMessageDiv.textContent = userInput;
+    chatContainer.appendChild(userMessageDiv);
+
+    userInputField.value = ""; // Clear the input field
+
+    // Define request options
+    const requestOptions = {
+      URL: `${pythonURI}/api/chatbot`,
+      method: "POST",
+      cache: "no-cache",
+      body: JSON.stringify({
+        user_input: userInput
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      console.log("Sending request to:", requestOptions.URL);
+
+      const response = await fetch(requestOptions.URL, {
+        method: requestOptions.method,
+        cache: requestOptions.cache,
+        headers: requestOptions.headers,
+        body: requestOptions.body,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server returned status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Add chatbot response to chat
+      const botMessageDiv = document.createElement("div");
+      botMessageDiv.className = "bg-gray-200 text-gray-900 px-4 py-2 rounded-lg my-2";
+      botMessageDiv.textContent = data.model_response || "No response received.";
+      chatContainer.appendChild(botMessageDiv);
+
+    } catch (error) {
+      console.error("Error:", error);
+
+      // Display an error message
+      const errorMessageDiv = document.createElement("div");
+      errorMessageDiv.className = "bg-red-200 text-red-900 px-4 py-2 rounded-lg my-2";
+      errorMessageDiv.textContent = "Error: Unable to process your message.";
+      chatContainer.appendChild(errorMessageDiv);
+    }
+
+    // Scroll to the latest message
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    return false;
+  }
+
+  // Attach event listener to the form
+  document.getElementById("chat-form").addEventListener("submit", handleChat);
+</script>
