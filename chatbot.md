@@ -1,7 +1,7 @@
 ---
 layout: base
-title: Test
-permalink: /test
+title: Car Expert Chatbot
+permalink: /chatbot
 search_exclude: true
 menu: nav/home.html
 ---
