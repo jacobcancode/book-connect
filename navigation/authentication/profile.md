@@ -458,6 +458,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             border-radius: 3px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
             z-index: 10;
+            top: 50%;
+            left: 50%;
         }
   .instruction {
             margin-top: 20px;
@@ -499,9 +501,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         <div class="ignition-container">
             <div class="ignition">
                 <div class="ignition-slot" id="ignitionSlot"></div>
-                <div class="key-top-view" id="keyTopView"></div>
             </div>
         </div>
+        <div class="key-top-view" id="keyTopView"></div>
         <img src="{{site.baseurl}}/images/CARKEY.png" alt="Key" class="key" id="key">
         <div class="instruction">Drag the key into the ignition to unlock!</div>
     </div>
@@ -514,7 +516,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     </div>
 
   <!-- Car Starting Sound -->
- <audio id="carStartSound" src="https://example.com/car-start.mp3"></audio>
+ <audio id="carStartSound" src="{{site.baseurl}}/images/CarKeySTART.mp3"></audio>
 
   <script>
         const key = document.getElementById('key');
@@ -572,6 +574,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     // Simulate turning the ignition
                     setTimeout(() => {
                         keyTopView.style.transform = 'rotate(90deg)';
+                        ignitionSlot.hidden = true;
                     }, 500);
 
                     // Unlock the page
