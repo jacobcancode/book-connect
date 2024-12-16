@@ -2,6 +2,7 @@
 layout: base
 title: Flocker Social Media Site
 search_exclude: true
+menu: nav/home.html
 ---
 
 <section id="welcome" class="h-screen flex items-center justify-center text-center bg-gray-900 text-white"> </section>
@@ -23,10 +24,3 @@ search_exclude: true
 <div style="text-align: center; margin-top: -500px;">
   <h1 style="color: yellow; font-size: 150px;">Electric Cars</h1>
 </div>
-
-
-
-
-
-
-
