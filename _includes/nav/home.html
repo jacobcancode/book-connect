@@ -96,10 +96,6 @@
                     profileLink.hidden = false;
                 } else {
                     //USER IS NOT AUTHENTICATED/LOGGED IN
-                    if (!window.location.href.includes("noauth")) {
-                        window.location.href =
-                            "/personal_flocker_frontend/noauth";
-                    }
                 }
             })
             .catch((err) => {
