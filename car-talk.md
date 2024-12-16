@@ -29,7 +29,7 @@ permalink: /Chat
             border-radius: 5px;
             padding: 10px;
             overflow-y: auto;
-            max-height: 300px;
+            max-height: 500px;
         }
 
         .chat-box div {
@@ -71,13 +71,18 @@ permalink: /Chat
             const messageInput = document.getElementById('messageInput');
             const chatBox = document.getElementById('chatBox');
 
-            // Replace with your backend API endpoint
-            const apiUrl = 'http://your-backend-url/api/chat';
+            // Use localhost for local testing
+            const apiUrl = 'http://localhost:5000/api/chat'; // Adjust the port as necessary
+
+            // Display a welcoming message in the chat history
+            displayMessage("Welcome to the chat! Feel free to send a message.", 'received');
 
             chatForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 const message = messageInput.value;
+
+                console.log('Sending message:', message); // Debug log
 
                 // Send message to backend
                 try {
@@ -88,6 +93,8 @@ permalink: /Chat
                         },
                         body: JSON.stringify({ message }),
                     });
+
+                    console.log('Response status:', response.status); // Debug log
 
                     if (response.ok) {
                         const data = await response.json();
