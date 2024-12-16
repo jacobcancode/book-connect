@@ -11,7 +11,7 @@ menu: nav/home.html
         <a href="{{site.baseurl}}/car-talk" class=" h-full bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:shadow-inner">
             <img src="https://exclusivecarregistry.com/render-images?imgid=262153" alt="Car Talk" class="w-full h-3/4 object-cover">
             <div class="p-6">
-                <h3 class="text-3xl font-bold mb-2">Car Talk</h3>
+                <h3 class="text-3xl font-bold mb-2">Car Chat</h3>
                 <p class="text-xl text-gray-700">Chat with other users about your dream cars!</p>
             </div>
         </a>

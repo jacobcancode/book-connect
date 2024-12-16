@@ -11,7 +11,7 @@ menu: nav/home.html
         <a href="mechanics.html" class="bg-blue-500 text-white py-2 px-4 rounded text-center">Mechanics</a> <!-- Link to Mechanics page -->
     </div>
     <div class="w-1/2 h-96 bg-post bg-cover bg-center flex items-center justify-center">
-        <a href="{{site.baseurl}}/gas/posts" class="bg-green-500 text-white py-2 px-4 rounded text-center">Posts</a> <!-- Link to Post page -->
+        <a href="{{site.baseurl}}/chat" class="bg-green-500 text-white py-2 px-4 rounded text-center">Chat</a> <!-- Link to Post page -->
     </div>
 </div>
 
