@@ -2,11 +2,15 @@
     class="z-10 sticky justify-items-center w-full top-0 grid grid-cols-5 bg-white justify-center p-4 drop-shadow"
 >
     <div class="col-span-2 flex gap-x-12 mt-3 justify-self-end" id="link-bar-1">
-        <a href="#" class="text-sm/6 font-semibold text-gray-900">Dream Car</a>
         <a
-            href="{{site.baseurl}}/hybrid"
+            href="{{site.baseurl}}/dream-car"
             class="text-sm/6 font-semibold text-gray-900"
-            >Hybrid</a
+            >Dream Car</a
+        >
+        <a
+            href="{{site.baseurl}}/recommended"
+            class="text-sm/6 font-semibold text-gray-900"
+            >Recommended Cars</a
         >
     </div>
     <div class="p-2" id="home-btn">
@@ -47,12 +51,79 @@
         class="col-span-2 flex gap-x-12 mt-3 justify-self-start"
         id="link-bar-2"
     >
-        <a href="#" class="text-sm/6 font-semibold text-gray-900">Electric</a>
-        <a href="gas" class="text-sm/6 font-semibold text-gray-900">Gas</a>
         <a
+            href="{{site.baseurl}}/electric"
+            class="text-sm/6 font-semibold text-gray-900"
+            >Electric</a
+        >
+        <a
+            href="{{{site.baseurl}}/gas"
+            class="text-sm/6 font-semibold text-gray-900"
+            >Gas</a
+        >
+        <a
+            id="signup-login"
             href="{{site.baseurl}}/noauth"
             class="hover:drop-shadow-xl z-10 right-6 absolute text-rose-600 font-extrabold tracking-tight"
             >Sign Up | Login</a
         >
+        <a
+            hidden
+            id="profile"
+            href="{{site.baseurl}}/profile"
+            class="hover:drop-shadow-xl z-10 right-6 absolute text-rose-600 font-extrabold tracking-tight"
+            >Profile</a
+        >
     </div>
 </header>
+
+<script type="module">
+    import {
+        pythonURI,
+        fetchOptions,
+    } from "{{site.baseurl}}/assets/js/api/config.js";
+
+    const loginLink = document.getElementById("signup-login");
+    const profileLink = document.getElementById("profile");
+
+    document.addEventListener("DOMContentLoaded", () => {
+        getCredentials() // Call the function to get credentials
+            .then((data) => {
+                if (data) {
+                    //IF DATA THEN THE USER IS AUTHENTICATED/LOGGED IN
+                    console.log("LOGGED IN");
+                    loginLink.hidden = true;
+                    profileLink.hidden = false;
+                } else {
+                    //USER IS NOT AUTHENTICATED/LOGGED IN
+                }
+            })
+            .catch((err) => {
+                // General error handler
+                console.error("Error fetching credentials: ", err);
+                // Handle any errors that occurred during getCredentials
+            });
+    });
+    function getCredentials() {
+        const URL = pythonURI + "/api/user";
+        return fetch(URL, fetchOptions)
+            .then((response) => {
+                // API response handler
+                if (response.status !== 200) {
+                    console.error("HTTP status code: " + response.status);
+                    return null; // prepares to stop the chain by returning null.
+                }
+                return response.json(); // plans to continue the chain with the data.
+            })
+            .then((data) => {
+                // Data handler from the previous promise
+                if (data === null) return null; // stops the chain, returns null.
+                return data; // returns data to caller
+            })
+            .catch((err) => {
+                // General error handler
+                console.error("Fetch error: ", err);
+                return null;
+            });
+    }
+</script>

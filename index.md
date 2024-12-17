@@ -53,15 +53,15 @@ menu: nav/home.html
         <h2 class="text-7xl font-extrabold text-rose-600 fade-in mb-6">About Us</h2>
         <p class="text-3xl text-gray-700 max-w-5xl fade-in">
             Legendary Motorsport is the ultimate social media hub for car enthusiasts! Whether you're looking to share
-            your experiences, troubleshoot car issues, or showcase stunning photos of your vehicle, our platform is here 
+            your experiences, troubleshoot car issues, or showcase stunning photos of your vehicle, our platform is here
             for you. We aim to connect gearheads, provide solutions, and celebrate the love of cars.
         </p>
     </section>
 
 <!-- Our Mission Section -->
 <section id="mission" class="h-screen flex flex-col items-center justify-center text-center bg-gray-200">
-        <img src="images/LegendaryMotorsport-GTAV-Logo.png" 
-            alt="Legendary Motorsport Logo" 
+        <img src="images/LegendaryMotorsport-GTAV-Logo.png"
+            alt="Legendary Motorsport Logo"
             class="h-96 w-auto fade-in">
         <h3 class="text-6xl font-bold mt-8 text-gray-900 fade-in">Our Mission</h3>
         <p class="text-3xl text-gray-700 mt-4 max-w-5xl fade-in">
@@ -114,9 +114,9 @@ menu: nav/home.html
             <!-- Original Testimonials -->
             <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
                 <p class="text-3xl italic leading-relaxed">
-                    "Legendary Motorsport is the<br> 
-                    best platform for car enthusiasts!<br> 
-                    I've learned so much<br> 
+                    "Legendary Motorsport is the<br>
+                    best platform for car enthusiasts!<br>
+                    I've learned so much<br>
                     and connected with amazing people."
                 </p>
                 <h3 class="mt-6 font-bold text-xl">- Alex R.</h3>
@@ -124,7 +124,7 @@ menu: nav/home.html
             <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
                 <p class="text-3xl italic leading-relaxed">
                     "A fantastic community where<br>
-                    I can share my car photography<br> 
+                    I can share my car photography<br>
                     and get great feedback."
                 </p>
                 <h3 class="mt-6 font-bold text-xl">- Jamie T.</h3>
@@ -132,7 +132,7 @@ menu: nav/home.html
             <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
                 <p class="text-3xl italic leading-relaxed">
                     "The forums have been super helpful<br>
-                    for troubleshooting car problems.<br> 
+                    for troubleshooting car problems.<br>
                     Highly recommended!"
                 </p>
                 <h3 class="mt-6 font-bold text-xl">- Chris M.</h3>
@@ -141,7 +141,7 @@ menu: nav/home.html
                 <p class="text-3xl italic leading-relaxed">
                     "I’ve found my dream car<br>
                     thanks to the resources<br>
-                    on this platform.<br> 
+                    on this platform.<br>
                     Amazing work!"
                 </p>
                 <h3 class="mt-6 font-bold text-xl">- Taylor L.</h3>
@@ -164,9 +164,9 @@ menu: nav/home.html
             <!-- Duplicate Testimonials for Infinite Scroll -->
             <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
                 <p class="text-3xl italic leading-relaxed">
-                    "Legendary Motorsport is the<br> 
-                    best platform for car enthusiasts!<br> 
-                    I've learned so much<br> 
+                    "Legendary Motorsport is the<br>
+                    best platform for car enthusiasts!<br>
+                    I've learned so much<br>
                     and connected with amazing people."
                 </p>
                 <h3 class="mt-6 font-bold text-xl">- Alex R.</h3>
@@ -174,7 +174,7 @@ menu: nav/home.html
             <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
                 <p class="text-3xl italic leading-relaxed">
                     "A fantastic community where<br>
-                    I can share my car photography<br> 
+                    I can share my car photography<br>
                     and get great feedback."
                 </p>
                 <h3 class="mt-6 font-bold text-xl">- Jamie T.</h3>
@@ -182,7 +182,7 @@ menu: nav/home.html
             <div class="bg-gray-800 rounded-lg p-8 shadow-lg min-w-[300px] min-h-[350px] flex flex-col justify-between">
                 <p class="text-3xl italic leading-relaxed">
                     "The forums have been super helpful<br>
-                    for troubleshooting car problems.<br> 
+                    for troubleshooting car problems.<br>
                     Highly recommended!"
                 </p>
                 <h3 class="mt-6 font-bold text-xl">- Chris M.</h3>
@@ -191,7 +191,7 @@ menu: nav/home.html
                 <p class="text-3xl italic leading-relaxed">
                     "I’ve found my dream car<br>
                     thanks to the resources<br>
-                    on this platform.<br> 
+                    on this platform.<br>
                     Amazing work!"
                 </p>
                 <h3 class="mt-6 font-bold text-xl">- Taylor L.</h3>
@@ -234,7 +234,7 @@ menu: nav/home.html
         <p class="text-3xl max-w-4xl text-center mb-8 fade-in">
             Connect with car enthusiasts from around the world, share your experiences, and explore amazing content about cars!
         </p>
-        <a href="#signup" class="bg-white text-red-600 text-3xl px-8 py-4 rounded-lg shadow-lg font-bold transition-transform transform hover:scale-110 fade-in">
+        <a href="{{site.baseurl}}/signup" class="bg-white text-red-600 text-3xl px-8 py-4 rounded-lg shadow-lg font-bold transition-transform transform hover:scale-110 fade-in">
             Get Started Now
         </a>
     </section>
