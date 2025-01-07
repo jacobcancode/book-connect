@@ -72,19 +72,23 @@ permalink: /Chat
             const chatBox = document.getElementById('chatBox');
 
             // Use localhost for local testing
-            const apiUrl = 'http://localhost:5000/api/chat'; // Adjust the port as necessary
+            const apiUrl = 'http://127.0.0.1:8887/car_chat'; // Adjust the port as necessary
 
             // Display a welcoming message in the chat history
             displayMessage("Welcome to the chat! Feel free to send a message.", 'received');
 
             chatForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
+                e.preventDefault(); // Prevent the default form submission
 
                 const message = messageInput.value;
 
-                console.log('Sending message:', message); // Debug log
+                // Display the message immediately in the chat box with user label
+                displayMessage(`You: ${message}`, 'sent');
 
-                // Send message to backend
+                // Clear the input field
+                messageInput.value = '';
+
+                // Send message to backend (optional)
                 try {
                     const response = await fetch(apiUrl, {
                         method: 'POST',
@@ -94,13 +98,7 @@ permalink: /Chat
                         body: JSON.stringify({ message }),
                     });
 
-                    console.log('Response status:', response.status); // Debug log
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        displayMessage(data.message, 'sent');
-                        messageInput.value = '';
-                    } else {
+                    if (!response.ok) {
                         console.error('Error sending message:', response.statusText);
                     }
                 } catch (error) {
