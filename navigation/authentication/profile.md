@@ -6,12 +6,13 @@ menu: nav/home.html
 search_exclude: true
 show_reading_time: false
 ---
+
 <div class="profile-container">
  <div class="card">
    <form>
      <div>
-       <label for="newUid">Enter New UID:</label>
-       <input type="text" id="newUid" placeholder="New UID">
+       <label for="newUid">Enter New Username:</label>
+       <input type="text" id="newUid" placeholder="New Username">
      </div>
      <div>
        <label for="newName">Enter New Name:</label>
@@ -378,20 +379,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 </script>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Ignition Unlock</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-            background: #660000; /* Dark red background */
-            color: white;
-        }
+<style>
    /* Lock Screen */
         .lock-screen {
             position: fixed;
@@ -426,7 +414,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
  .ignition-slot {
             width: 60px;
-            height: 20px; /* Smaller size */
+            height: 20px; 
             background: #777;
             border-radius: 5px;
             position: absolute;
@@ -437,7 +425,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
   /* Key */
         .key {
-            width: 200px; /* Larger size */
+            width: 200px; 
             height: auto;
             position: absolute;
             top: 70%;
@@ -471,30 +459,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-  /* Page Content */
-        .content {
-            width: 100%;
-            min-height: 100vh;
-            padding: 40px;
-            background: linear-gradient(to bottom, #333, #000);
-            color: white;
-            position: fixed;
-            top: 100vh;
-            left: 0;
-            z-index: 5;
-            overflow-y: auto;
-            transition: transform 1s ease-in-out;
-        }
-  .content h1 {
-            margin-bottom: 20px;
-            font-size: 36px;
-        }
-  .content p {
-            font-size: 18px;
-            line-height: 1.6;
-        }
-    </style>
-</head>
+</style>
 <body>
     <!-- Lock Screen -->
     <div class="lock-screen" id="lockScreen">
@@ -508,12 +473,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         <div class="instruction">Drag the key into the ignition to unlock!</div>
     </div>
 
- <!-- Page Content -->
- <div class="content" id="content">
-        <h1>Welcome to the Garage!</h1>
-        <p>Start your engines and explore a world of cars, customizations, and more. You've unlocked the page with style!</p>
-        <p>Scroll down to see the latest updates, car reviews, and tips for car enthusiasts. Enjoy the ride!</p>
-    </div>
 
   <!-- Car Starting Sound -->
  <audio id="carStartSound" src="{{site.baseurl}}/images/CarKeySTART.mp3"></audio>
@@ -590,5 +549,77 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
     </script>
+</body>
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CarConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+
+<nav class="bg-white shadow-md p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-blue-600">CarConnect</h1>
+        <div class="flex space-x-4">
+            <a href="#" class="text-gray-600 hover:text-blue-500">Chats</a>
+            <a href="#" class="text-gray-600 hover:text-blue-500">Posts</a>
+            <a href="settings.html" class="text-gray-600 hover:text-blue-500">Settings</a>
+        </div>
+    </nav>
+
+ <div class="flex">
+        <!-- Quick Navigation Sidebar -->
+        <aside class="w-64 bg-white p-4 shadow-lg h-screen">
+            <ul class="space-y-4">
+                <li>
+                    <a href="profile.html" class="block p-2 bg-gray-100 rounded-lg hover:bg-blue-500 hover:text-white">
+                        🚗 Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="garage.html" class="block p-2 bg-gray-100 rounded-lg hover:bg-blue-500 hover:text-white">
+                        🔧 My Garage
+                    </a>
+                </li>
+                <li>
+                    <a href="explore.html" class="block p-2 bg-gray-100 rounded-lg hover:bg-blue-500 hover:text-white">
+                        🌎 Explore
+                    </a>
+                </li>
+                <li>
+                    <a href="messages.html" class="block p-2 bg-gray-100 rounded-lg hover:bg-blue-500 hover:text-white">
+                        💬 Messages
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html" class="block p-2 bg-gray-100 rounded-lg hover:bg-blue-500 hover:text-white">
+                        ⚙️ Settings
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+<!-- Main Content -->
+ <main class="flex-1 p-6">
+            <h2 class="text-2xl font-semibold text-gray-700">Welcome Back!</h2>
+
+ <!-- Example Post -->
+<div class="bg-white p-4 rounded-lg shadow-md mt-6">
+                <h3 class="text-lg font-semibold">User123’s New Ride</h3>
+                <img src="https://source.unsplash.com/800x400/?car" alt="Car Post" class="rounded-lg mt-2">
+                <p class="mt-2 text-gray-600">Just picked up this beauty! What do you guys think?</p>
+                <div class="mt-4 flex space-x-4">
+                    <button class="text-blue-500 hover:underline">Like</button>
+                    <button class="text-gray-500 hover:underline">Comment</button>
+                </div>
+            </div>
+
+ </main>
+ </div>
+
 </body>
 </html>
