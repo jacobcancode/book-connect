@@ -14,7 +14,7 @@ permalink: /Chat
     <link rel="stylesheet" href="styles.css">
     <style>
         .chat-container {
-            width: 400px;
+            width: 1000px;
             margin: 0 auto;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -71,34 +71,60 @@ permalink: /Chat
             const messageInput = document.getElementById('messageInput');
             const chatBox = document.getElementById('chatBox');
 
+            // Generate a random user ID for this session
+            const userId = 'User_' + Math.floor(Math.random() * 1000);
+
             // Use localhost for local testing
             const apiUrl = 'http://127.0.0.1:8887/car_chat'; // Adjust the port as necessary
 
             // Display a welcoming message in the chat history
-            displayMessage("Welcome to the chat! Feel free to send a message.", 'received');
+            displayMessage({
+                text: "Welcome to the chat! Feel free to send a message.",
+                type: 'received',
+                time: new Date(),
+                userId: 'System'
+            });
 
             chatForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // Prevent the default form submission
+                e.preventDefault();
 
                 const message = messageInput.value;
+                const currentTime = new Date();
 
-                // Display the message immediately in the chat box with user label
-                displayMessage(`You: ${message}`, 'sent');
+                // Display message in chat box
+                displayMessage({
+                    text: message,
+                    type: 'sent',
+                    time: currentTime,
+                    userId: userId
+                });
 
-                // Clear the input field
+                // Clear input field
                 messageInput.value = '';
 
-                // Send message to backend (optional)
+                // Match the exact format from Postman
+                const messageData = {
+                    "message": message,
+                    "user_id": 1  // Using the same user_id as shown in Postman
+                };
+
+                console.log('Sending message data:', messageData); // Debug log
+
+                // Send to backend
                 try {
-                    const response = await fetch(apiUrl, {
+                    const response = await fetch('http://127.0.0.1:8887/car_chat', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
+                            'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ message }),
+                        body: JSON.stringify(messageData)
                     });
 
-                    if (!response.ok) {
+                    console.log('Response status:', response.status); // Debug log
+
+                    if (response.ok) {
+                        console.log('Message sent successfully');
+                    } else {
                         console.error('Error sending message:', response.statusText);
                     }
                 } catch (error) {
@@ -106,13 +132,59 @@ permalink: /Chat
                 }
             });
 
-            function displayMessage(message, type) {
+            function displayMessage({ text, type, time, userId }) {
                 const messageDiv = document.createElement('div');
-                messageDiv.textContent = message;
+                const timeString = new Date(time).toLocaleTimeString();
+                
+                // Create message container
                 messageDiv.className = type === 'sent' ? 'sent-message' : 'received-message';
+                
+                // Add message content with user ID and time
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <span class="user-id">${type === 'sent' ? 'You' : userId}</span>
+                        <span class="timestamp">${timeString}</span>
+                    </div>
+                    <div class="message-text">${text}</div>
+                `;
+                
                 chatBox.appendChild(messageDiv);
                 chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
             }
+
+            // Add some CSS styles for the new message format
+            const style = document.createElement('style');
+            style.textContent = `
+                .message-header {
+                    font-size: 0.8em;
+                    color: #666;
+                    margin-bottom: 2px;
+                }
+                .user-id {
+                    font-weight: bold;
+                    margin-right: 10px;
+                }
+                .timestamp {
+                    color: #999;
+                }
+                .message-text {
+                    margin-bottom: 10px;
+                }
+                .sent-message {
+                    background-color: #e3f2fd;
+                    padding: 8px;
+                    border-radius: 8px;
+                    margin: 5px 0;
+                    align-self: flex-end;
+                }
+                .received-message {
+                    background-color: #f5f5f5;
+                    padding: 8px;
+                    border-radius: 8px;
+                    margin: 5px 0;
+                }
+            `;
+            document.head.appendChild(style);
 
             // Function to fetch messages (optional)
             async function fetchMessages() {
@@ -120,7 +192,12 @@ permalink: /Chat
                     const response = await fetch(apiUrl);
                     if (response.ok) {
                         const messages = await response.json();
-                        messages.forEach(msg => displayMessage(msg.message, 'received'));
+                        messages.forEach(msg => displayMessage({
+                            text: msg.message,
+                            type: 'received',
+                            time: msg.timestamp || new Date(),
+                            userId: msg.userId || 'Unknown User'
+                        }));
                     }
                 } catch (error) {
                     console.error('Error fetching messages:', error);
