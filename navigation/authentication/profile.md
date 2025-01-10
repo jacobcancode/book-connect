@@ -623,3 +623,44 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 </body>
 </html>
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Button</title>
+    <style>
+        /* Styling for the button */
+        .custom-button {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-button:hover {
+            background: linear-gradient(45deg, #0056b3, #0094cc);
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Stylish Button -->
+ <a href="comment" class="custom-button">Comment Test</a>
+
+</body>
+</html>
