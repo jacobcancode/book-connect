@@ -8,13 +8,13 @@ menu: nav/home.html
 
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-    <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Add a Vehicle</h2>
+    <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Manage Vehicles</h2>
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
     <form class="space-y-4 mt-4" id="vehicle-form">
       <div>
-        <label for="vin-input" class="block text-sm/6 font-medium text-gray-900">VIN</label>
+        <label for="vin-input" class="block text-sm/6 font-medium text-gray-900">Add a VIN</label>
         <div class="mt-2">
           <input type="text" id="vin-input" placeholder="Enter VIN" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-rose-600 sm:text-sm/6">
         </div>
@@ -23,6 +23,25 @@ menu: nav/home.html
         <button type="submit" class="flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">Add Vehicle</button>
       </div>
     </form>
+
+    <form class="space-y-4 mt-8" id="update-vin-form">
+      <div>
+        <label for="old-vin-input" class="block text-sm/6 font-medium text-gray-900">Current VIN</label>
+        <div class="mt-2">
+          <input type="text" id="old-vin-input" placeholder="Enter Current VIN" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-rose-600 sm:text-sm/6">
+        </div>
+      </div>
+      <div>
+        <label for="new-vin-input" class="block text-sm/6 font-medium text-gray-900">New VIN</label>
+        <div class="mt-2">
+          <input type="text" id="new-vin-input" placeholder="Enter New VIN" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-rose-600 sm:text-sm/6">
+        </div>
+      </div>
+      <div>
+        <button type="submit" class="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Update Vehicle</button>
+      </div>
+    </form>
+
     <div id="message" class="mt-4 text-center text-red-500"></div>
   </div>
 </div>
@@ -72,6 +91,57 @@ menu: nav/home.html
             vinInput.value = '';
         } else {
             messageElement.textContent = data.message || 'Failed to add vehicle';
+        }
+    } catch (error) {
+        messageElement.textContent = 'Error connecting to the server: ' + error.message;
+    }
+  });
+
+  document.getElementById('update-vin-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const oldVinInput = document.getElementById('old-vin-input');
+    const newVinInput = document.getElementById('new-vin-input');
+    const oldVin = oldVinInput.value.trim();
+    const newVin = newVinInput.value.trim();
+    const messageElement = document.getElementById('message');
+
+    // Reset message
+    messageElement.textContent = '';
+
+    // Validate VIN lengths
+    if (oldVin.length !== 17 || newVin.length !== 17) {
+        messageElement.textContent = 'Both VINs must be 17 characters long.';
+        return;
+    }
+
+    try {
+        // Create the request body
+        const requestBody = JSON.stringify({ old_vin: oldVin, new_vin: newVin });
+
+        // Make the fetch request to the API
+        const response = await fetch(`${pythonURI}/api/vinStore`, {
+            method: "PUT",
+            cache: "default",
+            mode: "cors",
+            credentials: "include",
+            body: requestBody,
+            headers: {
+            'Content-Type': 'application/json',
+            'X-Origin': 'client'
+            },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            messageElement.textContent = `Vehicle VIN updated successfully: ${data.vehicle.make} ${data.vehicle.model} (${data.vehicle.year})`;
+            messageElement.classList.remove('text-red-500');
+            messageElement.classList.add('text-green-500');
+            oldVinInput.value = '';
+            newVinInput.value = '';
+        } else {
+            messageElement.textContent = data.message || 'Failed to update vehicle';
         }
     } catch (error) {
         messageElement.textContent = 'Error connecting to the server: ' + error.message;
