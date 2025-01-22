@@ -20,7 +20,7 @@ menu: nav/home.html
         </div>
       </div>
       <div>
-        <button type="submit" class="flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">Add Vehicle</button>
+        <button type="submit" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Add Vehicle</button>
       </div>
     </form>
 
@@ -38,9 +38,30 @@ menu: nav/home.html
         </div>
       </div>
       <div>
-        <button type="submit" class="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Update Vehicle</button>
+        <button type="submit" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Update Vehicle</button>
       </div>
     </form>
+
+    <div class="mt-8">
+      <button id="refresh-vehicles" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Refresh Vehicles</button>
+      <div class="mt-4 flex justify-center">
+        <div class="overflow-x-auto w-full">
+          <table id="vehicles-table" class="table-auto border-collapse border border-gray-300 text-center w-full">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-4 py-2">VIN</th>
+                <th class="border border-gray-300 px-4 py-2">Make</th>
+                <th class="border border-gray-300 px-4 py-2">Model</th>
+                <th class="border border-gray-300 px-4 py-2">Year</th>
+                <th class="border border-gray-300 px-4 py-2">Engine Type</th>
+              </tr>
+            </thead>
+            <tbody id="vehicles-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
     <div id="message" class="mt-4 text-center text-red-500"></div>
   </div>
@@ -49,6 +70,48 @@ menu: nav/home.html
 <script type='module'>
   import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
+  async function refreshVehicles() {
+    const messageElement = document.getElementById('message');
+    const vehiclesBody = document.getElementById('vehicles-body');
+
+    // Clear the table body
+    vehiclesBody.innerHTML = '';
+
+    try {
+      const response = await fetch(`${pythonURI}/api/vinStore`, {
+        method: "GET",
+        cache: "default",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Origin': 'client'
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        data.forEach(vehicle => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="border border-gray-300 px-4 py-2">${vehicle.vin}</td>
+            <td class="border border-gray-300 px-4 py-2">${vehicle.make}</td>
+            <td class="border border-gray-300 px-4 py-2">${vehicle.model}</td>
+            <td class="border border-gray-300 px-4 py-2">${vehicle.year}</td>
+            <td class="border border-gray-300 px-4 py-2">${vehicle.engine_type}</td>
+          `;
+          vehiclesBody.appendChild(row);
+        });
+        messageElement.textContent = '';
+      } else {
+        messageElement.textContent = data.message || 'Failed to load vehicles';
+      }
+    } catch (error) {
+      messageElement.textContent = 'Error connecting to the server: ' + error.message;
+    }
+  }
+
   document.getElementById('vehicle-form').addEventListener('submit', async function(event) {
     event.preventDefault();
 
@@ -56,44 +119,41 @@ menu: nav/home.html
     const vin = vinInput.value.trim();
     const messageElement = document.getElementById('message');
     
-    // Reset message
     messageElement.textContent = '';
 
-    // Validate VIN length
     if (vin.length !== 17) {
-        messageElement.textContent = 'VIN must be 17 characters long.';
-        return;
+      messageElement.textContent = 'VIN must be 17 characters long.';
+      return;
     }
 
     try {
-        // Create the request body
-        const requestBody = JSON.stringify({ vin });
+      const requestBody = JSON.stringify({ vin });
 
-        // Make the fetch request to the API
-        const response = await fetch(`${pythonURI}/api/vinStore`, {
-            method: "POST",
-            cache: "default",
-            mode: "cors",
-            credentials: "include",
-            body: requestBody,
-            headers: {
-            'Content-Type': 'application/json',
-            'X-Origin': 'client'
-            },
-        });
+      const response = await fetch(`${pythonURI}/api/vinStore`, {
+        method: "POST",
+        cache: "default",
+        mode: "cors",
+        credentials: "include",
+        body: requestBody,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Origin': 'client'
+        },
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (response.ok) {
-            messageElement.textContent = `Vehicle added successfully: ${data.make} ${data.model} (${data.year})`;
-            messageElement.classList.remove('text-red-500');
-            messageElement.classList.add('text-green-500');
-            vinInput.value = '';
-        } else {
-            messageElement.textContent = data.message || 'Failed to add vehicle';
-        }
+      if (response.ok) {
+        messageElement.textContent = `Vehicle added successfully: ${data.make} ${data.model} (${data.year})`;
+        messageElement.classList.remove('text-red-500');
+        messageElement.classList.add('text-green-500');
+        vinInput.value = '';
+        await refreshVehicles();
+      } else {
+        messageElement.textContent = data.message || 'Failed to add vehicle';
+      }
     } catch (error) {
-        messageElement.textContent = 'Error connecting to the server: ' + error.message;
+      messageElement.textContent = 'Error connecting to the server: ' + error.message;
     }
   });
 
@@ -106,45 +166,47 @@ menu: nav/home.html
     const newVin = newVinInput.value.trim();
     const messageElement = document.getElementById('message');
 
-    // Reset message
     messageElement.textContent = '';
 
-    // Validate VIN lengths
     if (oldVin.length !== 17 || newVin.length !== 17) {
-        messageElement.textContent = 'Both VINs must be 17 characters long.';
-        return;
+      messageElement.textContent = 'Both VINs must be 17 characters long.';
+      return;
     }
 
     try {
-        // Create the request body
-        const requestBody = JSON.stringify({ old_vin: oldVin, new_vin: newVin });
+      const requestBody = JSON.stringify({ old_vin: oldVin, new_vin: newVin });
 
-        // Make the fetch request to the API
-        const response = await fetch(`${pythonURI}/api/vinStore`, {
-            method: "PUT",
-            cache: "default",
-            mode: "cors",
-            credentials: "include",
-            body: requestBody,
-            headers: {
-            'Content-Type': 'application/json',
-            'X-Origin': 'client'
-            },
-        });
+      const response = await fetch(`${pythonURI}/api/vinStore`, {
+        method: "PUT",
+        cache: "default",
+        mode: "cors",
+        credentials: "include",
+        body: requestBody,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Origin': 'client'
+        },
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (response.ok) {
-            messageElement.textContent = `Vehicle VIN updated successfully: ${data.vehicle.make} ${data.vehicle.model} (${data.vehicle.year})`;
-            messageElement.classList.remove('text-red-500');
-            messageElement.classList.add('text-green-500');
-            oldVinInput.value = '';
-            newVinInput.value = '';
-        } else {
-            messageElement.textContent = data.message || 'Failed to update vehicle';
-        }
+      if (response.ok) {
+        messageElement.textContent = `Vehicle VIN updated successfully: ${data.vehicle.make} ${data.vehicle.model} (${data.vehicle.year})`;
+        messageElement.classList.remove('text-red-500');
+        messageElement.classList.add('text-green-500');
+        oldVinInput.value = '';
+        newVinInput.value = '';
+        await refreshVehicles();
+      } else {
+        messageElement.textContent = data.message || 'Failed to update vehicle';
+      }
     } catch (error) {
-        messageElement.textContent = 'Error connecting to the server: ' + error.message;
+      messageElement.textContent = 'Error connecting to the server: ' + error.message;
     }
   });
+
+  document.getElementById('refresh-vehicles').addEventListener('click', refreshVehicles);
+
+  // Load vehicles on page load
+  refreshVehicles();
 </script>
