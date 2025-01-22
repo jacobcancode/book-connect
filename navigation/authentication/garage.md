@@ -3,7 +3,7 @@ layout: needsAuth
 title: Garage
 permalink: /garage
 search_exclude: true
-menu: nav/home.html
+menu: nav/home.html 
 ---
 
 <section id="featured-cars" class="pb-20 bg-gray-100 h-screen flex items-center">
