@@ -47,7 +47,7 @@ getPostsByType(carType).then((posts) => {
         if (dateNowString === dateString) {
           dateString = "Today";
         }
-        const postElement = makePostElement(post.title, post.description, dateString, formattedImages, post.id, post.car_type);
+        const postElement = makePostElement(post.title, post.description, dateString, formattedImages, post.id, post.car_type, post.user.name);
         postsContainer.appendChild(postElement)
       });
     });
@@ -56,7 +56,7 @@ getPostsByType(carType).then((posts) => {
   }
 });
 
-function makePostElement(title, description, date, images, postId, carType) {
+function makePostElement(title, description, date, images, postId, carType, username) {
   const postElement = document.createElement("div");
     postElement.className =
       "w-1/3 max-w-xl mx-auto border border-gray-300 rounded-lg shadow-md bg-white";
@@ -69,6 +69,7 @@ function makePostElement(title, description, date, images, postId, carType) {
           <h3 class="text-lg font-semibold text-gray-900">${title}</h3>
           <p class="text-sm text-gray-500">${date}</p>
           <p class="text-sm text-gray-500">${carType.toUpperCase()}</p>
+          <p class="text-sm text-gray-500">${username.toUpperCase()}</p>
         </div>
       </div>
       <hr class="border-gray-300">
