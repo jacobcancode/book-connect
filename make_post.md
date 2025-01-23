@@ -1,8 +1,9 @@
 ---
-layout: base
+layout: needsAuth
 menu: nav/home.html
 permalink: /make_post
 ---
+
 <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
 <h2 class="text-2xl font-bold mb-4 text-center">Create A Post</h2>
 <div class="space-y-4">
@@ -74,7 +75,7 @@ permalink: /make_post
       }
       const img = await convertToBase64(imageDivs[i].files[0])
       imageBase64Table.push({
-        "name": imageDivs[i].files[0].name,
+        "name": ""+i,
         "base64": img
       })
     }
