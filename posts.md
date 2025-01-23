@@ -1,7 +1,7 @@
 ---
 layout: base
 menu: nav/home.html
-permalink: /gas/posts
+permalink: /allPosts
 ---
 <div id="posts-container" class="py-10 space-y-6"></div>
 
@@ -10,7 +10,7 @@ permalink: /gas/posts
 <script type="module">
 import { getPostsByType, getImagesByPostId } from "{{site.baseurl}}/assets/js/api/posts.js";
 
-const carType = "gas";
+const carType = "all";
 const postsContainer = document.getElementById("posts-container");
 
 const getPostImages = async (postId) => {
@@ -29,24 +29,26 @@ const getPostImages = async (postId) => {
 
 getPostsByType(carType).then((posts) => {
   if (posts) {
-    console.log("Fetched posts:", posts);
     const postsContainer = document.getElementById("posts-container");
     const dateNow = new Date();
-    const dateNowString = dateNow.getMonth() + "/" + dateNow.getDate() + "/" + dateNow.getFullYear();
+    const dateNowString = dateNow.getMonth()+1 + "/" + dateNow.getDate() + "/" + dateNow.getFullYear();
     const dateNowHours = dateNow.getHours();
-    posts.forEach((post) => {
+    const orderedPostElements = [...posts]
+    const orderedPosts = orderPostByDate(posts)
+
+    orderedPosts.forEach((post, i) => {
       getImagesByPostId(post.id).then((images) => {
         const formattedImages = [];
         images.forEach((image) => {
           formattedImages.push(`data:image/jpeg;base64,${image}`);
         });
         const date = new Date(post.date_posted)
-        let dateString = date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
+        let dateString = date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear();
         if (dateNowString === dateString) {
           dateString = "Today";
         }
-        const postElement = makePostElement(post.title, post.description, dateString, formattedImages, post.id);
-        postsContainer.appendChild(postElement);
+        const postElement = makePostElement(post.title, post.description, dateString, formattedImages, post.id, post.car_type);
+        postsContainer.appendChild(postElement)
       });
     });
   } else {
@@ -54,12 +56,10 @@ getPostsByType(carType).then((posts) => {
   }
 });
 
-function makePostElement(title, description, date, images, postId) {
+function makePostElement(title, description, date, images, postId, carType) {
   const postElement = document.createElement("div");
     postElement.className =
       "w-1/3 max-w-xl mx-auto border border-gray-300 rounded-lg shadow-md bg-white";
-
-    console.log("Images:", images);
 
     // Add post content
     postElement.innerHTML = `
@@ -68,6 +68,7 @@ function makePostElement(title, description, date, images, postId) {
         <div class="ml-3">
           <h3 class="text-lg font-semibold text-gray-900">${title}</h3>
           <p class="text-sm text-gray-500">${date}</p>
+          <p class="text-sm text-gray-500">${carType.toUpperCase()}</p>
         </div>
       </div>
       <hr class="border-gray-300">
@@ -94,6 +95,18 @@ function makePostElement(title, description, date, images, postId) {
     `;
 
     return postElement;
+}
+
+function orderPostByDate(posts) {
+  const sortedPosts = posts
+
+  sortedPosts.sort((post1, post2) => {
+    const dateTime1 = new Date(post1["date_posted"])
+    const dateTime2 = new Date(post2["date_posted"])
+
+    return dateTime1.getTime()-dateTime2.getTime()
+  })
+  return sortedPosts
 }
 
 </script>
