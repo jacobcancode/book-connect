@@ -14,46 +14,83 @@ permalink: /Chat
     <link rel="stylesheet" href="styles.css">
     <style>
         .chat-container {
-            width: 1000px;
+            width: 80%;
+            max-width: 1200px;
+            min-width: 400px;
+            height: 100%;
             margin: 0 auto;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
             display: flex;
             flex-direction: column;
+            padding: 20px;
         }
 
         .chat-box {
             flex: 1;
             border: 1px solid #ddd;
             border-radius: 5px;
-            padding: 10px;
+            padding: 20px;
             overflow-y: auto;
-            max-height: 500px;
+            max-height: 70vh;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .chat-box div {
+        .message-header {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        .user-id {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .timestamp {
+            color: #999;
+        }
+        .message-text {
+            margin-bottom: 10px;
+        }
+        .sent-message {
+            background-color: #e3f2fd;
+            padding: 8px;
+            border-radius: 8px;
+            margin: 5px 0;
+            align-self: flex-end;
+        }
+        .received-message {
+            background-color: #f5f5f5;
+            padding: 8px;
+            border-radius: 8px;
             margin: 5px 0;
         }
 
         form {
             display: flex;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         input {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px;
         }
 
         button {
-            padding: 10px;
+            padding: 12px 24px;
             border: none;
             background-color: #28a745;
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -152,40 +189,6 @@ permalink: /Chat
                 chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
             }
 
-            // Add some CSS styles for the new message format
-            const style = document.createElement('style');
-            style.textContent = `
-                .message-header {
-                    font-size: 0.8em;
-                    color: #666;
-                    margin-bottom: 2px;
-                }
-                .user-id {
-                    font-weight: bold;
-                    margin-right: 10px;
-                }
-                .timestamp {
-                    color: #999;
-                }
-                .message-text {
-                    margin-bottom: 10px;
-                }
-                .sent-message {
-                    background-color: #e3f2fd;
-                    padding: 8px;
-                    border-radius: 8px;
-                    margin: 5px 0;
-                    align-self: flex-end;
-                }
-                .received-message {
-                    background-color: #f5f5f5;
-                    padding: 8px;
-                    border-radius: 8px;
-                    margin: 5px 0;
-                }
-            `;
-            document.head.appendChild(style);
-
             // Function to fetch messages (optional)
             async function fetchMessages() {
                 try {
@@ -196,7 +199,7 @@ permalink: /Chat
                             text: msg.message,
                             type: 'received',
                             time: msg.timestamp || new Date(),
-                            userId: msg.userId || 'Unknown User'
+                            userId: msg.user_id || 'Unknown User'
                         }));
                     }
                 } catch (error) {
