@@ -2,7 +2,6 @@
 layout: needsAuth
 title: Car Info
 permalink: /car-info
-search_exclude: true
 menu: nav/home.html
 ---
 
