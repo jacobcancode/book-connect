@@ -57,7 +57,7 @@ menu: nav/home.html
         const vin = document.getElementById('vin').value;
         const engineType = document.getElementById('engine_type').value;
 
-        createUserCar(make, model, year, engineType, trim, color, vin, engineType)
+        createUserCar(make, model, year, engineType, trim, color, vin)
     }
 
     document.addEventListener("DOMContentLoaded", () => {
