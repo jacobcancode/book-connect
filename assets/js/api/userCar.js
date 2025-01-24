@@ -1,34 +1,41 @@
 import { fetchOptions, pythonURI } from "./config.js";
 
 export async function createUserCar(make, model, year, engine_type, trim, color, vin) {
-    const endpoint = pythonURI + '/api/userCar';
-    const fetchOptions = {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'include', // include, same-origin, omit
+    const postOptions = {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "default", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "include", // include, same-origin, omit
         headers: {
-            'Content-Type': 'application/json',
-            'X-Origin': 'client' // New custom header to identify source
+          "Content-Type": "application/json",
+          "X-Origin": "client", // New custom header to identify source
         },
         body: JSON.stringify({
-            make,
-            model,
-            year,
-            engine_type,
-            trim,
-            color,
-            vin
-        })
+            make: make,
+            model: model,
+            year: year,
+            engine_type: engine_type,
+            trim: trim,
+            color: color,
+            vin: vin
+        }),
     };
+
+    const endpoint = pythonURI + '/api/userCars';
+
     try {
-        const response = await fetch(endpoint, fetchOptions);
+        const response = await fetch(endpoint, postOptions);
         if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+          throw new Error(`Failed to fetch posts: ${response.status}`);
         }
-        const data = await response.json();
-        return data;
+        const posts = await response.json();
+        return posts;
     } catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
+        console.error("Error fetching posts:", error.message);
+        return null;
     }
+}
+
+export async function getUserCars() {
+    
 }
