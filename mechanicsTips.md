@@ -1,7 +1,7 @@
 ---
 layout: needsAuth
 title: Mechanics Tips
-permalink: /mechanicsTips
+permalink: /mechanical-help
 search_exclude: true
 menu: nav/home.html
 ---
@@ -39,58 +39,115 @@ menu: nav/home.html
       </div>
     </form>
   </div>
+
+  <div class="mt-10">
+    <h3 class="text-lg font-medium text-gray-900">All Mechanics Tips</h3>
+    <ul id="tips-list" class="mt-4 space-y-2">
+      <!-- Tips will be dynamically added here -->
+    </ul>
+  </div>
 </div>
 
+<!-- Link to External JavaScript File -->
 <script type="module">
-  import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
+import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
-  document.getElementById('add-tip-form').addEventListener('submit', async function (event) {
-    event.preventDefault();
+// Function to add a new tip
+document.getElementById('add-tip-form').addEventListener('submit', async function (event) {
+  event.preventDefault();
 
-    // Collect form values
-    const make = document.getElementById('make').value;
-    const model = document.getElementById('model').value;
-    const year = document.getElementById('year').value;
-    const issue = document.getElementById('issue').value;
-    const tip = document.getElementById('tip').value;
+  // Collect form values
+  const make = document.getElementById('make').value;
+  const model = document.getElementById('model').value;
+  const year = document.getElementById('year').value;
+  const issue = document.getElementById('issue').value;
+  const tip = document.getElementById('tip').value;
 
-    // Prepare request data
-    const requestData = {
-      make: make,
-      model: model,
-      year: year || null, // Optional field
-      issue: issue,
-      tip: tip
-    };
+  // Prepare request data
+  const requestData = {
+    make: make,
+    model: model,
+    year: year || null, // Optional field
+    issue: issue,
+    tip: tip
+  };
 
-    try {
-      // Make a POST request to the API
-      const response = await fetch(`${pythonURI}/api/mechanicsTips`, {
-        method: "POST",
-        cache: "no-cache",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`, // Add token if needed
-        },
-        body: JSON.stringify(requestData), // Attach the form data
-      });
+  try {
+    // Make a POST request to the API
+    const response = await fetch(`${pythonURI}/api/mechanicsTips`, {
+      method: "POST",
+      cache: "no-cache",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token') || ''}`, // Add token if needed
+      },
+      body: JSON.stringify(requestData), // Attach the form data
+    });
 
-      // Handle the response
-      if (response.ok) {
-        const result = await response.json();
-        alert('Mechanics Tip added successfully!');
-        document.getElementById('add-tip-form').reset(); // Reset form on success
-        console.log(result); // Log result for debugging
-      } else {
-        const error = await response.json();
-        alert(`Error: ${error.message || 'Failed to add tip'}`);
-        console.error(error);
-      }
-    } catch (err) {
-      alert('An error occurred while processing your request. Please try again.');
-      console.error(err);
+    // Handle the response
+    if (response.ok) {
+      const result = await response.json();
+      alert('Mechanics Tip added successfully!');
+      document.getElementById('add-tip-form').reset(); // Reset form on success
+      console.log(result); // Log result for debugging
+      fetchTips(); // Refresh tips list
+    } else {
+      const error = await response.json();
+      alert(`Error: ${error.message || 'Failed to add tip'}`);
+      console.error(error);
     }
-  });
+  } catch (err) {
+    alert('An error occurred while processing your request. Please try again.');
+    console.error(err);
+  }
+});
+
+// Function to fetch and display tips
+async function fetchTips() {
+  try {
+    const response = await fetch(`${pythonURI}/api/mechanicsTips`, {
+      method: "GET",
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "default", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "include", // include, same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+        "X-Origin": "client", // New custom header to identify source
+    },
+    });
+
+    if (response.ok) {
+      const tips = await response.json();
+      const tipsList = document.getElementById('tips-list');
+      tipsList.innerHTML = ''; // Clear the list before appending
+
+        console.log(tips)
+
+      // Populate the list with tips
+      tips.forEach(tip => {
+        const li = document.createElement('li');
+        li.className = 'p-4 bg-gray-100 rounded-md shadow-sm';
+        li.innerHTML = `
+          <strong>Make:</strong> ${tip.make}<br>
+          <strong>Model:</strong> ${tip.model}<br>
+          <strong>Year:</strong> ${tip.year || 'N/A'}<br>
+          <strong>Issue:</strong> ${tip.issue}<br>
+          <strong>Tip:</strong> ${tip.tip}
+        `;
+        tipsList.appendChild(li);
+      });
+    } else {
+      const error = await response.json();
+      console.error(`Error fetching tips: ${error.message}`);
+    }
+  } catch (err) {
+    console.error('An error occurred while fetching tips:', err);
+  }
+}
+
+// Fetch tips on page load
+document.addEventListener('DOMContentLoaded', fetchTips);
+
 </script>

@@ -22,6 +22,8 @@
             class="text-sm/6 font-semibold text-gray-900"
             >Make Post</a
         >
+        
+            
     </div>
     <div class="p-2" id="home-btn">
         <a href="{{site.baseurl}}/" class="text-sm/6 font-bold text-rose-600"
@@ -71,6 +73,24 @@
             class="text-sm/6 font-semibold text-gray-900"
             >Gas</a
         >
+        
+           <!-- Help dropdown (hover version) -->
+            <div class="relative group">
+                <a
+                    href="{{site.baseurl}}/help"
+                    class="text-sm/6 font-semibold text-gray-900"
+                    id="help-button"
+                >Help</a>
+                <div
+                    id="help-dropdown"
+                    class="dropdown-content absolute hidden group-hover:block bg-white shadow-md rounded-lg mt-2 w-40 text-sm font-semibold text-gray-900"
+                >
+                    <a href="{{site.baseurl}}/terms" class="block px-4 py-2">Terms of Service</a>
+                    <a href="{{site.baseurl}}/mechanicsTips" class="block px-4 py-2">Car Issues Post Page</a>
+                    <a href="{{site.baseurl}}/terms" class="block px-4 py-2">Terms of Service</a>
+                </div>
+            </div>
+
         <a
             id="signup-login"
             href="{{site.baseurl}}/noauth"

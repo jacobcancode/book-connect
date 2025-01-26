@@ -5,4 +5,3 @@ search_exclude: true
 menu: nav/home.html
 ---
 
-Greetings Bruzz
