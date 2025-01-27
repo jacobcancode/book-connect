@@ -8,7 +8,7 @@ permalink: /allPosts
 <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.19/dist/full.min.css" rel="stylesheet" type="text/css" />
 
 <script type="module">
-import { getPostsByType, getImagesByPostId } from "{{site.baseurl}}/assets/js/api/posts.js";
+import { getPostsByType, getImagesByPostId, removePostById } from "{{site.baseurl}}/assets/js/api/posts.js";
 
 const carType = "all";
 const postsContainer = document.getElementById("posts-container");
@@ -25,6 +25,15 @@ const getPostImages = async (postId) => {
       console.error("Failed to fetch images");
     }
   });
+}
+
+const removePost = async (postId, postElement) => {
+  const removed = await removePostById(postId)
+  if (removed) {
+    postElement.remove(); // Remove the post element from the DOM
+  } else {
+    alert("Cannot remove post");
+  }
 }
 
 getPostsByType(carType).then((posts) => {
@@ -63,6 +72,11 @@ function makePostElement(title, description, date, images, postId, carType, user
 
     // Add post content
     postElement.innerHTML = `
+      <button
+        class="closeBtn top-2 left-2 text-gray-600 hover:text-gray-900 rounded-full p-2"
+        aria-label="Close">
+        &times;
+      </button>
       <!-- Header -->
       <div class="flex items-center px-4 py-2">
         <div class="ml-3">
@@ -94,6 +108,10 @@ function makePostElement(title, description, date, images, postId, carType, user
       </div>
       <hr class="border-gray-300">
     `;
+
+    const closeButton = postElement.querySelector(".closeBtn");
+    closeButton.addEventListener("click", () => removePost(postId, postElement));
+
 
     return postElement;
 }
