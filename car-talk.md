@@ -181,6 +181,7 @@ permalink: /Chat
                     <div class="message-header">
                         <span class="user-id">${type === 'sent' ? 'You' : userId}</span>
                         <span class="timestamp">${timeString}</span>
+                        ${type === 'sent' ? `<button class="edit-button" data-id="${id}">Edit</button>` : ''}
                         ${type === 'sent' ? `<button class="delete-button" data-id="${id}">Delete</button>` : ''}
                     </div>
                     <div class="message-text">${text}</div>
@@ -191,6 +192,9 @@ permalink: /Chat
 
                 // Add event listeners for edit and delete buttons
                 if (type === 'sent') {
+                    messageDiv.querySelector('.edit-button').addEventListener('click', () => {
+                        editMessage(id, text);
+                    });
                     messageDiv.querySelector('.delete-button').addEventListener('click', () => {
                         deleteMessage(id);
                     });
@@ -225,7 +229,7 @@ permalink: /Chat
                             type: 'received',
                             time: msg.timestamp || new Date(),
                             userId: msg.user_id || 'Unknown User',
-                            id: msg.id // Include message ID for deleting
+                            id: msg.id // Ensure the ID is included
                         }));
                     }
                 } catch (error) {
@@ -235,6 +239,29 @@ permalink: /Chat
 
             // Fetch messages on load (optional)
             fetchMessages();
+
+            function editMessage(id, currentText) {
+                const newText = prompt("Edit your message:", currentText);
+                if (newText !== null) {
+                    // Update the message in the backend
+                    fetch(`http://127.0.0.1:8887/car_chat/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: newText })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Message updated successfully');
+                            fetchMessages(); // Re-fetch messages to get updated data
+                        } else {
+                            console.error('Error updating message:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            }
         });
     </script>
 </body>
