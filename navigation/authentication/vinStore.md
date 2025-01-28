@@ -23,7 +23,6 @@ menu: nav/home.html
         <button type="submit" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Add Vehicle</button>
       </div>
     </form>
-
     <form class="space-y-4 mt-8" id="update-vin-form">
       <div>
         <label for="old-vin-input" class="block text-sm/6 font-medium text-gray-900">Current VIN</label>
@@ -41,7 +40,6 @@ menu: nav/home.html
         <button type="submit" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Update Vehicle</button>
       </div>
     </form>
-
     <div class="mt-8">
       <button id="refresh-vehicles" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Refresh Vehicles</button>
       <div class="mt-4 flex justify-center">
@@ -54,6 +52,7 @@ menu: nav/home.html
                 <th class="border border-gray-300 px-4 py-2">Model</th>
                 <th class="border border-gray-300 px-4 py-2">Year</th>
                 <th class="border border-gray-300 px-4 py-2">Engine Type</th>
+                <th class="border border-gray-300 px-4 py-2">Actions</th>
               </tr>
             </thead>
             <tbody id="vehicles-body">
@@ -62,7 +61,6 @@ menu: nav/home.html
         </div>
       </div>
     </div>
-
     <div id="message" class="mt-4 text-center text-red-500"></div>
   </div>
 </div>
@@ -100,12 +98,46 @@ menu: nav/home.html
             <td class="border border-gray-300 px-4 py-2">${vehicle.model}</td>
             <td class="border border-gray-300 px-4 py-2">${vehicle.year}</td>
             <td class="border border-gray-300 px-4 py-2">${vehicle.engine_type}</td>
+            <td class="border border-gray-300 px-4 py-2">
+              <button class="delete-btn text-red-600 hover:underline" data-vin="${vehicle.vin}">Delete</button>
+            </td>
           `;
           vehiclesBody.appendChild(row);
         });
         messageElement.textContent = '';
       } else {
         messageElement.textContent = data.message || 'Failed to load vehicles';
+      }
+    } catch (error) {
+      messageElement.textContent = error.message + ': Add a VIN';
+    }
+  }
+
+  async function deleteVehicle(vin) {
+    const messageElement = document.getElementById('message');
+
+    try {
+      const response = await fetch(`${pythonURI}/api/vinStore`, {
+        method: "DELETE",
+        cache: "default",
+        mode: "cors",
+        credentials: "include",
+        body: JSON.stringify({ vin }),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Origin': 'client'
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        messageElement.textContent = `Vehicle deleted successfully: VIN ${vin}`;
+        messageElement.classList.remove('text-red-500');
+        messageElement.classList.add('text-green-500');
+        await refreshVehicles();
+      } else {
+        messageElement.textContent = data.message || 'Failed to delete vehicle';
       }
     } catch (error) {
       messageElement.textContent = 'Error connecting to the server: ' + error.message;
@@ -202,6 +234,16 @@ menu: nav/home.html
       }
     } catch (error) {
       messageElement.textContent = 'Error connecting to the server: ' + error.message;
+    }
+  });
+
+  document.getElementById('vehicles-body').addEventListener('click', async function(event) {
+    if (event.target.classList.contains('delete-btn')) {
+      const vin = event.target.dataset.vin;
+
+      if (confirm(`Are you sure you want to delete vehicle with VIN: ${vin}?`)) {
+        await deleteVehicle(vin);
+      }
     }
   });
 

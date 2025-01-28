@@ -14,46 +14,87 @@ permalink: /Chat
     <link rel="stylesheet" href="styles.css">
     <style>
         .chat-container {
-            width: 1000px;
+            width: 80%;
+            max-width: 1200px;
+            min-width: 400px;
+            height: 100%;
             margin: 0 auto;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
             display: flex;
             flex-direction: column;
+            padding: 20px;
         }
 
         .chat-box {
             flex: 1;
             border: 1px solid #ddd;
             border-radius: 5px;
-            padding: 10px;
+            padding: 20px;
             overflow-y: auto;
-            max-height: 500px;
+            max-height: 70vh;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .chat-box div {
+            margin: 10px 0;
+        }
+
+        .message-header {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        .user-id {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .timestamp {
+            color: #999;
+        }
+        .message-text {
+            margin-bottom: 10px;
+        }
+        .sent-message {
+            background-color: #e3f2fd;
+            padding: 8px;
+            border-radius: 8px;
+            margin: 5px 0;
+            align-self: flex-end;
+        }
+        .received-message {
+            background-color: #f5f5f5;
+            padding: 8px;
+            border-radius: 8px;
             margin: 5px 0;
         }
 
         form {
             display: flex;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         input {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px;
         }
 
         button {
-            padding: 10px;
+            padding: 12px 24px;
             border: none;
             background-color: #28a745;
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -71,10 +112,6 @@ permalink: /Chat
             const messageInput = document.getElementById('messageInput');
             const chatBox = document.getElementById('chatBox');
 
-            // Generate a random user ID for this session
-            const userId = 'User_' + Math.floor(Math.random() * 1000);
-
-            // Use localhost for local testing
             const apiUrl = 'http://127.0.0.1:8887/car_chat'; // Adjust the port as necessary
 
             // Display a welcoming message in the chat history
@@ -87,32 +124,33 @@ permalink: /Chat
 
             chatForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-
                 const message = messageInput.value;
                 const currentTime = new Date();
 
-                // Display message in chat box
-                displayMessage({
-                    text: message,
-                    type: 'sent',
-                    time: currentTime,
-                    userId: userId
-                });
+                // Send message to backend
+                const messageData = await sendMessage(message);
+                if (messageData) {
+                    displayMessage({
+                        text: message,
+                        type: 'sent',
+                        time: currentTime,
+                        userId: 'You',
+                        id: messageData.id // Store the message ID for future deletes
+                    });
+                }
 
                 // Clear input field
                 messageInput.value = '';
+            });
 
-                // Match the exact format from Postman
+            async function sendMessage(message) {
                 const messageData = {
                     "message": message,
                     "user_id": 1  // Using the same user_id as shown in Postman
                 };
 
-                console.log('Sending message data:', messageData); // Debug log
-
-                // Send to backend
                 try {
-                    const response = await fetch('http://127.0.0.1:8887/car_chat', {
+                    const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -120,71 +158,65 @@ permalink: /Chat
                         body: JSON.stringify(messageData)
                     });
 
-                    console.log('Response status:', response.status); // Debug log
-
                     if (response.ok) {
-                        console.log('Message sent successfully');
+                        return await response.json(); // Return the message data including ID
                     } else {
                         console.error('Error sending message:', response.statusText);
                     }
                 } catch (error) {
                     console.error('Error:', error);
                 }
-            });
+                return null;
+            }
 
-            function displayMessage({ text, type, time, userId }) {
+            function displayMessage({ text, type, time, userId, id }) {
                 const messageDiv = document.createElement('div');
                 const timeString = new Date(time).toLocaleTimeString();
                 
                 // Create message container
                 messageDiv.className = type === 'sent' ? 'sent-message' : 'received-message';
                 
-                // Add message content with user ID and time
+                // Add message content with user ID, time, and edit/delete buttons
                 messageDiv.innerHTML = `
                     <div class="message-header">
                         <span class="user-id">${type === 'sent' ? 'You' : userId}</span>
                         <span class="timestamp">${timeString}</span>
+                        ${type === 'sent' ? `<button class="edit-button" data-id="${id}">Edit</button>` : ''}
+                        ${type === 'sent' ? `<button class="delete-button" data-id="${id}">Delete</button>` : ''}
                     </div>
                     <div class="message-text">${text}</div>
                 `;
                 
                 chatBox.appendChild(messageDiv);
                 chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+
+                // Add event listeners for edit and delete buttons
+                if (type === 'sent') {
+                    messageDiv.querySelector('.edit-button').addEventListener('click', () => {
+                        editMessage(id, text);
+                    });
+                    messageDiv.querySelector('.delete-button').addEventListener('click', () => {
+                        deleteMessage(id);
+                    });
+                }
             }
 
-            // Add some CSS styles for the new message format
-            const style = document.createElement('style');
-            style.textContent = `
-                .message-header {
-                    font-size: 0.8em;
-                    color: #666;
-                    margin-bottom: 2px;
+            function deleteMessage(id) {
+                if (confirm("Are you sure you want to delete this message?")) {
+                    fetch(`${apiUrl}/${id}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Message deleted successfully');
+                            fetchMessages(); // Re-fetch messages to reflect the deletion
+                        } else {
+                            console.error('Error deleting message:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
                 }
-                .user-id {
-                    font-weight: bold;
-                    margin-right: 10px;
-                }
-                .timestamp {
-                    color: #999;
-                }
-                .message-text {
-                    margin-bottom: 10px;
-                }
-                .sent-message {
-                    background-color: #e3f2fd;
-                    padding: 8px;
-                    border-radius: 8px;
-                    margin: 5px 0;
-                    align-self: flex-end;
-                }
-                .received-message {
-                    background-color: #f5f5f5;
-                    padding: 8px;
-                    border-radius: 8px;
-                    margin: 5px 0;
-                }
-            `;
-            document.head.appendChild(style);
+            }
 
             // Function to fetch messages (optional)
             async function fetchMessages() {
@@ -196,7 +228,8 @@ permalink: /Chat
                             text: msg.message,
                             type: 'received',
                             time: msg.timestamp || new Date(),
-                            userId: msg.userId || 'Unknown User'
+                            userId: msg.user_id || 'Unknown User',
+                            id: msg.id // Ensure the ID is included
                         }));
                     }
                 } catch (error) {
@@ -206,6 +239,29 @@ permalink: /Chat
 
             // Fetch messages on load (optional)
             fetchMessages();
+
+            function editMessage(id, currentText) {
+                const newText = prompt("Edit your message:", currentText);
+                if (newText !== null) {
+                    // Update the message in the backend
+                    fetch(`http://127.0.0.1:8887/car_chat/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: newText })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Message updated successfully');
+                            fetchMessages(); // Re-fetch messages to get updated data
+                        } else {
+                            console.error('Error updating message:', response.statusText);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            }
         });
     </script>
 </body>
