@@ -72,6 +72,7 @@ function makePostElement(title, description, date, images, postId, carType, user
 
     // Add post content
     postElement.innerHTML = `
+      <!-- Close Button -->
       <button
         class="closeBtn top-2 left-2 text-gray-600 hover:text-gray-900 rounded-full p-2"
         aria-label="Close">
