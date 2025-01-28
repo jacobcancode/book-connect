@@ -37,7 +37,46 @@ menu: nav/home.html
         button:hover {
             background-color: #0056b3;
         }
-    </style>
+        .update-prompt {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.update-overlay {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+}
+.update-box {
+position: relative;
+background: white;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+z-index: 1001;
+}
+.update-actions {
+margin-top: 10px;
+display: flex;
+justify-content: space-between;
+}
+.update-actions button {
+padding: 5px 10px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+</style>
 </head>
 <body>
     <div class="container">
@@ -89,6 +128,8 @@ menu: nav/home.html
                     favoriteElement.classList.add('favorite-item');
                     favoriteElement.innerHTML = `
                         <h3>${item.name}</h3>
+                        <h3>${item.user_input}</h3> 
+                        <button class="update-button" data-id="${item.id}" data-name="${item.name}">Update Comment</button>
                         <button class="delete-button" data-name="${item.name}">Delete</button>
                     `;
                     favoritesContainer.appendChild(favoriteElement);
@@ -102,6 +143,65 @@ menu: nav/home.html
                         await delete_favorite(itemName);
                     });
                 });
+                
+                favoritesContainer.addEventListener('click', (event) => {
+                if (event.target.classList.contains('update-button')) {
+                    const itemName = event.target.getAttribute('data-name');
+                    const itemId = event.target.getAttribute('data-id');
+
+
+                    // Create the update comment prompt
+                    const updatePrompt = document.createElement('div');
+                    updatePrompt.classList.add('update-prompt');
+                    updatePrompt.innerHTML = `
+                        <div class="update-overlay"></div>
+                        <div class="update-box">
+                            <h3>Update Comment for ${itemName}</h3>
+                            <input type="text" id="new-comment" placeholder="Enter new comment" />
+                            <div class="update-actions">
+                                <button id="save-comment">Save</button>
+                                <button id="close-prompt">Close</button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(updatePrompt);
+
+                    // Close the prompt
+                    document.getElementById('close-prompt').addEventListener('click', () => {
+                        document.body.removeChild(updatePrompt);
+                    });
+
+                    // Save the new comment
+                    document.getElementById('save-comment').addEventListener('click', () => {
+                        const newComment = document.getElementById('new-comment').value;
+                        if (newComment.trim() !== '') {
+                            update_comment(newComment, itemId)
+                            console.log(`Saving new comment for ${itemName}: ${newComment}`);
+                            // Perform update logic here (e.g., updating the UI or sending data to the server)
+
+                            // Example: Update the comment in the UI
+                            const favoriteItems = document.querySelectorAll('.favorite-item');
+                            favoriteItems.forEach(item => {
+                                if (item.querySelector('h3').textContent === itemName) {
+                                    const commentElement = item.querySelector('h3:nth-of-type(2)');
+                                    commentElement.textContent = newComment;
+                                }
+                            });
+
+                            // Remove the prompt after saving
+                            document.body.removeChild(updatePrompt);
+                        } else {
+                            alert('Please enter a valid comment.');
+                        }
+                    });
+                }
+            });
+
+
+
+
+
+
             } catch (error) {
                 console.error(error);
                 favoritesContainer.innerHTML = '<p>Error loading favorites. Please try again.</p>';
@@ -121,6 +221,33 @@ menu: nav/home.html
                         'X-Origin': 'client'
                     },
                     body: JSON.stringify({ name: itemName })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to delete favorite');
+                }
+
+                const data = await response.json();
+                alert(data.message);
+                await get_favorites(); // Refresh the favorites list
+            } catch (error) {
+                console.error('Error deleting favorite:', error);
+                alert('An unexpected error occurred while deleting the item.');
+            }
+        }
+
+        async function update_comment(newComment, id) {
+            try {
+                const response = await fetch(`${pythonURI}/api/itemStore`, {
+                    method: 'PUT',
+                    mode: 'cors',
+                    cache: 'default',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Origin': 'client'
+                    },
+                    body: JSON.stringify({ id: id, user_input: newComment })
                 });
 
                 if (!response.ok) {
@@ -165,6 +292,7 @@ menu: nav/home.html
                     <p><strong>Mileage:</strong> ${listing.mileage}</p>
                     <p><strong>Price:</strong> ${listing.price}</p>
                     <button class="favorite-button" data-name="${listing.name}">Add to Favorites</button>
+                    <input type="text" id="${listing.name}-comment" placeholder="Enter a comment">
                 `;
                 listingElement.innerHTML = content;
                 listingsContainer.appendChild(listingElement);
@@ -175,6 +303,7 @@ menu: nav/home.html
             favoriteButtons.forEach(button => {
                 button.addEventListener("click", async (event) => {
                     const listingName = event.target.getAttribute("data-name");
+                    const listingComment = document.getElementById(listingName+"-comment").value;
 
                     try {
                         const response = await fetch(`${pythonURI}/api/itemStore`, {
@@ -186,7 +315,7 @@ menu: nav/home.html
                                 'Content-Type': 'application/json',
                                 'X-Origin': 'client'
                             },
-                            body: JSON.stringify({ name: listingName })
+                            body: JSON.stringify({ name: listingName, user_input: listingComment })
                         });
 
                         if (response.ok) {
