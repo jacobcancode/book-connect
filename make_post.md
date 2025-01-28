@@ -89,6 +89,8 @@ permalink: /make_post
       car_type: "gas",
       image_base64_table: imageBase64Table
     })
+
+    window.location.href = '{{site.baseurl}}/allPosts'
   }
 
   submitButton.addEventListener('click', submit)
