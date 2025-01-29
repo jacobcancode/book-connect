@@ -241,25 +241,42 @@ permalink: /Chat
             fetchMessages();
 
             function editMessage(id, currentText) {
+                // Log the ID of the message being edited
+                console.log('Editing message with ID:', id);
+                
+                // Prompt the user to enter the new message text
                 const newText = prompt("Edit your message:", currentText);
+                
+                // Check if the user provided new text
                 if (newText !== null) {
-                    // Update the message in the backend
+                    // Prepare the fetch request to update the message in the backend
                     fetch(`http://127.0.0.1:8887/car_chat/${id}`, {
-                        method: 'PUT',
+                        method: 'PUT', // Specify the HTTP method as PUT
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json' // Set content type to JSON
                         },
-                        body: JSON.stringify({ message: newText })
+                        body: JSON.stringify({ message: newText }) // Send the new message text as JSON
                     })
                     .then(response => {
+                        // Check if the response is OK (status code 200)
                         if (response.ok) {
-                            console.log('Message updated successfully');
-                            fetchMessages(); // Re-fetch messages to get updated data
+                            console.log('Message updated successfully'); // Log success message
+                            return response.json(); // Parse the JSON response
                         } else {
+                            // Log error if the update fails
                             console.error('Error updating message:', response.statusText);
+                            throw new Error('Update failed'); // Throw an error to be caught in the catch block
                         }
                     })
-                    .catch(error => console.error('Error:', error));
+                    .then(updatedMessage => {
+                        // Optionally, you can handle the updated message here
+                        console.log('Updated message data:', updatedMessage);
+                        fetchMessages(); // Re-fetch messages to get updated data
+                    })
+                    .catch(error => {
+                        // Log any errors that occurred during the fetch
+                        console.error('Error:', error);
+                    });
                 }
             }
         });
