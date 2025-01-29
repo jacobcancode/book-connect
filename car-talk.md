@@ -43,6 +43,9 @@ permalink: /Chat
             font-size: 0.8em;
             color: #666;
             margin-bottom: 2px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .user-id {
             font-weight: bold;
@@ -95,6 +98,29 @@ permalink: /Chat
 
         button:hover {
             background-color: #218838;
+        }
+
+        .edit-button, .delete-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+
+        .edit-button:hover, .delete-button:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
@@ -173,7 +199,7 @@ permalink: /Chat
                 const messageDiv = document.createElement('div');
                 const timeString = new Date(time).toLocaleTimeString();
                 
-                // Create message container
+                // Create message container with appropriate class based on message type (sent or received)
                 messageDiv.className = type === 'sent' ? 'sent-message' : 'received-message';
                 
                 // Add message content with user ID, time, and edit/delete buttons
@@ -188,9 +214,9 @@ permalink: /Chat
                 `;
                 
                 chatBox.appendChild(messageDiv);
-                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+                chatBox.scrollTop = chatBox.scrollHeight;
 
-                // Add event listeners for edit and delete buttons
+                // Add event listeners for edit and delete buttons if the message is sent by the user
                 if (type === 'sent') {
                     messageDiv.querySelector('.edit-button').addEventListener('click', () => {
                         editMessage(id, text);
@@ -224,12 +250,16 @@ permalink: /Chat
                     const response = await fetch(apiUrl);
                     if (response.ok) {
                         const messages = await response.json();
+                        
+                        // Clear the chat box before displaying new messages
+                        chatBox.innerHTML = ''; // Clear existing messages
+                        
                         messages.forEach(msg => displayMessage({
                             text: msg.message,
                             type: 'received',
                             time: msg.timestamp || new Date(),
                             userId: msg.user_id || 'Unknown User',
-                            id: msg.id // Ensure the ID is included
+                            id: msg.id // Include message ID
                         }));
                     }
                 } catch (error) {
