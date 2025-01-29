@@ -74,6 +74,36 @@ export async function createPost(post) {
   }
 }
 
+export async function removePostById(id) {
+  const postOptions = {
+    method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    cache: "default", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "include", // include, same-origin, omit
+    headers: {
+      "Content-Type": "application/json",
+      "X-Origin": "client", // New custom header to identify source
+    },
+    body: JSON.stringify({
+      id: id,
+    }),
+  };
+
+  const endpoint = pythonURI + "/api/carPost";
+
+  try {
+    const response = await fetch(endpoint, postOptions);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts: ${response.status}`);
+    }
+    const data = await response.json();
+    return data["deleted"];
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
+    return null;
+  }
+}
+
 export async function convertToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

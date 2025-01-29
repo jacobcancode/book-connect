@@ -16,3 +16,93 @@ menu: nav/home.html
                 <p class="text-xl text-gray-700">Add your dream car to the garage!</p>
             </div>
         </a>
+    </div>
+</section>
+<body class="bg-gray-100 py-8 px-4">
+
+<div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-semibold text-center mb-6">Car List</h1>
+
+    <table class="min-w-full table-auto text-left text-sm">
+        <thead>
+            <tr class="bg-gray-200 text-gray-700">
+                <th class="py-2 px-4 font-medium">Make</th>
+                <th class="py-2 px-4 font-medium">Model</th>
+                <th class="py-2 px-4 font-medium">Year</th>
+                <th class="py-2 px-4 font-medium">Trim</th>
+                <th class="py-2 px-4 font-medium">Engine Type</th>
+                <th class="py-2 px-4 font-medium">Color</th>
+            </tr>
+        </thead>
+        <tbody id="cars-container">
+            <!-- Loop through your array of cars and display each car's data -->
+            <tr class="border-t border-b hover:bg-gray-50">
+                <td class="py-3 px-4">Bugatti</td>
+                <td class="py-3 px-4">Veyron</td>
+                <td class="py-3 px-4">2008</td>
+                <td class="py-3 px-4">Grand Sport</td>
+                <td class="py-3 px-4">W16</td>
+                <td class="py-3 px-4">White</td>
+            </tr>
+            <tr class="border-t border-b hover:bg-gray-50">
+                <td class="py-3 px-4">Pagani</td>
+                <td class="py-3 px-4">Zonda</td>
+                <td class="py-3 px-4">2008</td>
+                <td class="py-3 px-4">F Clubsport</td>
+                <td class="py-3 px-4">Amg 5.2L v12</td>
+                <td class="py-3 px-4">Black</td>
+            </tr>
+            <tr class="border-t border-b hover:bg-gray-50">
+                <td class="py-3 px-4">Ford</td>
+                <td class="py-3 px-4">GT</td>
+                <td class="py-3 px-4">1967</td>
+                <td class="py-3 px-4">Mk1</td>
+                <td class="py-3 px-4">V8</td>
+                <td class="py-3 px-4">Gulf Blue</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script type="module">
+    import { getUserCars } from "{{site.baseurl}}/assets/js/api/userCar.js"
+
+     tableBody.innerHTML = '';
+
+    // Loop through each car and create a new row
+    cars.forEach(car => {
+      const row = document.createElement('tr');
+
+      // Create and append each cell with car data
+      const makeCell = document.createElement('td');
+      makeCell.textContent = car.make;
+      row.appendChild(makeCell);
+
+      const modelCell = document.createElement('td');
+      modelCell.textContent = car.model;
+      row.appendChild(modelCell);
+
+      const yearCell = document.createElement('td');
+      yearCell.textContent = car.year;
+      row.appendChild(yearCell);
+
+      const colorCell = document.createElement('td');
+      colorCell.textContent = car.color;
+      row.appendChild(colorCell);
+
+      const engine_typeCell = document.createElement('td');
+      engine_typeCell.textContent = car.engine_type;
+      row.appendChild(engine_typeCell);
+
+      const trimCell = document.createElement('td');
+      trimCell.textContent = car.trim;
+      row.appendChild(trimCell);
+
+      // Append the row to the table body
+      tableBody.appendChild(row);
+    });
+
+    // Call the function to add rows when the page loads
+    window.onload = addCarRows;
+
+</script>
