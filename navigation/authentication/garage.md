@@ -122,9 +122,9 @@ menu: nav/home.html
         deleteBtn.src = "{{site.baseurl}}/images/bin.png";
 
         deleteBtn.addEventListener('click', () => {
-            const deleted = deleteCarById(1)
+            const deleted = deleteCarById(car.id)
             if (deleted) {
-                // window.location.reload()
+                 window.location.reload()
             } 
         })
 
