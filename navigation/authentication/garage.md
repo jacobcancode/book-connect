@@ -21,7 +21,7 @@ menu: nav/home.html
 <body class="bg-gray-100 py-8 px-4">
 
 <div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-    <h1 class="text-3xl font-semibold text-center mb-6">Car List</h1>
+    <h1 class="text-3xl font-semibold text-center mb-6">My Cars</h1>
 
     <table class="min-w-full table-auto text-left text-sm">
         <thead>
@@ -34,7 +34,7 @@ menu: nav/home.html
                 <th class="py-2 px-4 font-medium">Color</th>
             </tr>
         </thead>
-        <tbody id="cars-container">
+        <tbody id="carTable">
             <!-- Loop through your array of cars and display each car's data -->
             <tr class="border-t border-b hover:bg-gray-50">
                 <td class="py-3 px-4">Bugatti</td>
@@ -65,44 +65,80 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-    import { getUserCars } from "{{site.baseurl}}/assets/js/api/userCar.js"
+    import { getUserCars, deleteCarById } from "{{site.baseurl}}/assets/js/api/userCar.js"
+
+    const tableBody = document.getElementById("carTable")
 
      tableBody.innerHTML = '';
 
+     const cars = await getUserCars()
+
     // Loop through each car and create a new row
     cars.forEach(car => {
-      const row = document.createElement('tr');
+        const row = document.createElement('tr');
+        row.className = "border-t border-b hover:bg-gray-50";
 
-      // Create and append each cell with car data
-      const makeCell = document.createElement('td');
-      makeCell.textContent = car.make;
-      row.appendChild(makeCell);
+        // Create and append each cell with car data
+        const makeCell = document.createElement('td');
+        makeCell.className = "py-3 px-4";
+        makeCell.textContent = car.make;
+        row.appendChild(makeCell);
 
-      const modelCell = document.createElement('td');
-      modelCell.textContent = car.model;
-      row.appendChild(modelCell);
+        const modelCell = document.createElement('td');
+        modelCell.className = "py-3 px-4";
+        modelCell.textContent = car.model;
+        row.appendChild(modelCell);
 
-      const yearCell = document.createElement('td');
-      yearCell.textContent = car.year;
-      row.appendChild(yearCell);
+        const yearCell = document.createElement('td');
+        yearCell.className = "py-3 px-4";
+        yearCell.textContent = car.year;
+        row.appendChild(yearCell);
 
-      const colorCell = document.createElement('td');
-      colorCell.textContent = car.color;
-      row.appendChild(colorCell);
+        const trimCell = document.createElement('td');
+        trimCell.className = "py-3 px-4";
+        trimCell.textContent = car.trim;
+        row.appendChild(trimCell);
 
-      const engine_typeCell = document.createElement('td');
-      engine_typeCell.textContent = car.engine_type;
-      row.appendChild(engine_typeCell);
+        const engine_typeCell = document.createElement('td');
+        engine_typeCell.className = "py-3 px-4";
+        engine_typeCell.textContent = car.engine_type;
+        row.appendChild(engine_typeCell);
 
-      const trimCell = document.createElement('td');
-      trimCell.textContent = car.trim;
-      row.appendChild(trimCell);
+        const colorCell = document.createElement('td');
+        colorCell.className = "py-3 px-4";
+        colorCell.textContent = car.color;
+        row.appendChild(colorCell);
 
-      // Append the row to the table body
-      tableBody.appendChild(row);
+        const deleteCell = document.createElement('td');
+        deleteCell.className = "py-3 px-4";
+
+        // Set a specific width for the delete cell (for example, 50px)
+        deleteCell.style.width = "50px";
+        row.appendChild(deleteCell);
+
+        // Create the delete button
+        const deleteBtn = document.createElement('input');
+        deleteBtn.type = "image";
+        deleteBtn.src = "{{site.baseurl}}/images/bin.png";
+
+        deleteBtn.addEventListener('click', () => {
+            const deleted = deleteCarById(1)
+            if (deleted) {
+                // window.location.reload()
+            } 
+        })
+
+        // Set a more reasonable size for the button (for example, 24px by 24px)
+        deleteBtn.style.width = "24px";
+        deleteBtn.style.height = "24px";
+
+        deleteCell.appendChild(deleteBtn);
+
+        // Append the row to the table body
+        tableBody.appendChild(row);
     });
 
     // Call the function to add rows when the page loads
-    window.onload = addCarRows;
+    // window.onload = addCarRows;
 
 </script>
