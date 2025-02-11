@@ -122,6 +122,12 @@ permalink: /Chat
         .delete-button:hover {
             background-color: #c82333;
         }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -202,14 +208,16 @@ permalink: /Chat
                 // Create message container with appropriate class based on message type (sent or received)
                 messageDiv.className = type === 'sent' ? 'sent-message' : 'received-message';
                 
-                // Add message content with user ID, time, edit button, and delete button
+                // Add message content with user ID, time, and buttons
                 messageDiv.innerHTML = `
                     <div class="message-header">
                         <span class="user-id">${userId}</span>
                         <span class="timestamp">${timeString}</span>
                         ${type === 'sent' ? `
-                            <button class="edit-button" data-id="${id}">Edit</button>
-                            <button class="delete-button" data-id="${id}">Delete</button>
+                            <div class="button-container">
+                                <button class="edit-button" data-id="${id}">Edit</button>
+                                <button class="delete-button" data-id="${id}">Delete</button>
+                            </div>
                         ` : ''}
                     </div>
                     <div class="message-text">${text}</div>
