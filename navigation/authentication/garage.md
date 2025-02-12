@@ -115,10 +115,7 @@ menu: nav/home.html
         const colorCell = document.createElement('td');
         colorCell.className = "py-3 px-4";
         colorCell.textContent = car.color;
-        row.appendChild(colorCell);
-
-        const deleteCell = document.createElement('td');
-        deleteCell.className = "py-3 px-4";
+        row.appendChild(colorCell); 
 
         // Set a specific width for the delete cell (for example, 50px)
         deleteCell.style.width = "50px";
