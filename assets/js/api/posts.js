@@ -67,10 +67,10 @@ export async function createPost(post) {
       throw new Error(`Failed to fetch posts: ${response.status}`);
     }
     const posts = await response.json();
-    return posts;
+    return true;
   } catch (error) {
     console.error("Error fetching posts:", error.message);
-    return null;
+    return false;
   }
 }
 
