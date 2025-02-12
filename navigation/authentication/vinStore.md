@@ -109,7 +109,7 @@ menu: nav/home.html
         messageElement.textContent = data.message || 'Failed to load vehicles';
       }
     } catch (error) {
-      messageElement.textContent = error.message + ': Add a VIN';
+      messageElement.textContent = 'Add a VIN';
     }
   }
 
