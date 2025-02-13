@@ -139,12 +139,28 @@ permalink: /Chat
         </form>
     </div>
     <script>
+        let pythonURI = '';
+        
+        if (location.hostname === "localhost") {
+                pythonURI = "http://localhost:8887";
+        } else if (location.hostname === "127.0.0.1") {
+                pythonURI = "http://127.0.0.1:8887";
+        } else {
+                pythonURI =  "https://motor.stu.nighthawkcodingsociety.com";
+        }
+
+        import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
+
         document.addEventListener('DOMContentLoaded', () => {
             const chatForm = document.getElementById('chatForm');
             const messageInput = document.getElementById('messageInput');
             const chatBox = document.getElementById('chatBox');
 
-            const apiUrl = 'http://127.0.0.1:8887/car_chat'; // Adjust the port as necessary
+
+
+            const apiUrl = pythonURI + '/car_chat'; // Adjust the port as necessary
+
+            
 
             // Display a welcoming message in the chat history
             displayMessage({
@@ -241,7 +257,7 @@ permalink: /Chat
 
             function deleteMessage(id, messageDiv) {
                 if (confirm("Are you sure you want to delete this message?")) {
-                    fetch(`http://127.0.0.1:8887/car_chat/${id}`, {
+                    fetch(`${pythonURI}/car_chat/${id}`, {
                         method: 'DELETE' // Specify the HTTP method as DELETE
                     })
                     .then(response => {
@@ -261,7 +277,7 @@ permalink: /Chat
 
             // Function to fetch messages on page load
             function fetchMessages() {
-                fetch('http://127.0.0.1:8887/car_chat', {
+                fetch('${pythonURI}/api/car_chat', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -295,7 +311,7 @@ permalink: /Chat
                 const newText = prompt("Edit your message:", currentText);
                 
                 if (newText !== null && newText.trim() !== "") {
-                    fetch(`http://127.0.0.1:8887/car_chat/${id}`, {
+                    fetch(`${pythonURI}/api/car_chat/${id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
