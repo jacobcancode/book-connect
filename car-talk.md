@@ -137,180 +137,105 @@ permalink: /Chat
             <input type="text" id="messageInput" placeholder="Type your message..." required>
             <button type="submit">Send</button>
         </form>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const chatForm = document.getElementById('chatForm');
-            const messageInput = document.getElementById('messageInput');
-            const chatBox = document.getElementById('chatBox');
+    </div>        
+</body>
 
-            const apiUrl = 'http://127.0.0.1:8887/car_chat';
+<script type="module">
+    import { getAllChat, postChat, deleteChat, updateChat } from "{{site.baseurl}}/assets/js/api/carChat.js";
 
-            // Display a welcoming message in the chat history
-            displayMessage({
-                text: "Welcome to the chat! Feel free to send a message.",
-                type: 'received',
-                time: new Date(),
-                userId: 'System'
-            });
+    // Function to create a chat message display with delete and edit buttons
+    function createMessageDisplay(message) {
+        const messageBox = document.createElement("div");
+        messageBox.className = "message-box";
 
-            chatForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const message = messageInput.value;
-                const currentTime = new Date();
+        const messageContent = document.createElement("p");
+        messageContent.innerHTML = `<strong>Message:</strong> ${message.message}`;
+        messageBox.appendChild(messageContent);
 
-                // Send message to backend
-                const messageData = await sendMessage(message);
-                if (messageData) {
-                    displayMessage({
-                        text: message,
-                        type: 'sent',
-                        time: currentTime,
-                        userId: 'You',
-                        id: messageData.id // Store the message ID for future deletes
-                    });
-                }
+        const messageUID = document.createElement("p");
+        messageUID.innerHTML = `UID: ${message.user_id}`;
+        messageBox.appendChild(messageUID);
 
-                // Clear input field
-                messageInput.value = '';
-            });
-
-            async function sendMessage(message) {
-                const messageData = {
-                    "message": message,
-                    "user_id": 1  // Using the same user_id as shown in Postman
-                };
-
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(messageData)
-                    });
-
-                    if (response.ok) {
-                        return await response.json(); // Return the message data including ID
-                    } else {
-                        console.error('Error sending message:', response.statusText);
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-                return null;
-            }
-
-            function displayMessage({ text, type, time, userId, id }) {
-                const messageDiv = document.createElement('div');
-                const timeString = new Date(time).toLocaleTimeString();
-                
-                messageDiv.className = type === 'sent' ? 'sent-message' : 'received-message';
-                
-                messageDiv.innerHTML = `
-                    <div class="message-header">
-                        <span class="user-id">${userId}</span>
-                        <span class="timestamp">${timeString}</span>
-                        ${type === 'sent' ? `
-                            <div class="button-container">
-                                <button class="edit-button" data-id="${id}">Edit</button>
-                                <button class="delete-button" data-id="${id}">Delete</button>
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="message-text">${text}</div>
-                `;
-                
-                chatBox.appendChild(messageDiv);
-                chatBox.scrollTop = chatBox.scrollHeight;
-
-                if (type === 'sent') {
-                    messageDiv.querySelector('.edit-button').addEventListener('click', () => {
-                        editMessage(id, text);
-                    });
-
-                    messageDiv.querySelector('.delete-button').addEventListener('click', () => {
-                        deleteMessage(id, messageDiv);
-                    });
-                }
-            }
-
-            function deleteMessage(id, messageDiv) {
-                if (confirm("Are you sure you want to delete this message?")) {
-                    fetch(`${apiUrl}/${id}`, {
-                        method: 'DELETE' // Specify the HTTP method as DELETE
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            // Remove the message from the chat display
-                            messageDiv.remove();
-                            console.log('Message deleted successfully');
-                        } else {
-                            console.error('Error deleting message:', response.statusText);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                }
-            }
-
-            function fetchMessages() {
-                fetch(apiUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Failed to fetch messages');
-                    }
-                })
-                .then(messages => {
-                    messages.forEach(msg => {
-                        displayMessage({
-                            text: msg.message,
-                            type: msg.user_id === 1 ? 'sent' : 'received',
-                            time: msg.timestamp ? new Date(msg.timestamp) : new Date(),
-                            userId: msg.username || msg.user_id || 'Unknown User',
-                            id: msg.id
-                        });
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-            }
-
-            // Call fetchMessages on page load
-            fetchMessages();
-
-            function editMessage(id, currentText) {
-                const newText = prompt("Edit your message:", currentText);
-                
-                if (newText !== null && newText.trim() !== "") {
-                    fetch(`${apiUrl}/${id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ message: newText })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            const messageDiv = document.querySelector(`.edit-button[data-id="${id}"]`).closest('.message-text');
-                            messageDiv.textContent = newText;
-                        } else {
-                            console.error('Error updating message:', response.statusText);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                }
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-button";
+        deleteButton.innerHTML = "Delete Message";
+        deleteButton.addEventListener("click", async () => {
+            const result = await deleteChat(message.id);
+            if (result.success) {
+                alert("Message deleted successfully!");
+                messageBox.remove(); // Remove the message box immediately
+            } else {
+                alert("Failed to delete message.");
             }
         });
-    </script>
-</body>
-</html>
+        messageBox.appendChild(deleteButton);
+
+        const editButton = document.createElement("button");
+        editButton.className = "edit-button";
+        editButton.innerHTML = "Edit Message";
+        editButton.addEventListener("click", () => {
+            const newContent = prompt("Edit your message:", message.content);
+            if (newContent !== null) {
+                updateChat(message.id, newContent).then(result => {
+                    if (result.success) {
+                        alert("Message updated successfully!");
+                        messageContent.innerHTML = `<strong>Message:</strong> ${newContent}`; // Update the message content immediately
+                    } else {
+                        alert("Failed to update message.");
+                    }
+                });
+            }
+        });
+        messageBox.appendChild(editButton);
+
+        return messageBox;
+    }
+
+    // Display all messages
+    async function displayMessages() {
+        const messages = await getAllChat();
+        const chatBox = document.getElementById("chatBox");
+        chatBox.innerHTML = ""; // Clear existing content
+        if (messages && messages.length > 0) {
+            messages.forEach(message => {
+                const newMessageDisplay = createMessageDisplay(message);
+                chatBox.appendChild(newMessageDisplay);
+            });
+            // Scroll to the bottom of the chat
+            chatBox.scrollTop = chatBox.scrollHeight;
+        } else {
+            chatBox.innerHTML = "<p>No messages available.</p>";
+        }
+    }
+
+    // Submit a new message
+    async function submitMessage() {
+        const messageInput = document.getElementById("messageInput");
+        const messageContent = messageInput.value.trim();
+        console.log(messageContent)
+        if (messageContent) {
+            const result = await postChat(messageContent);
+            if (result.success) {
+                messageInput.value = "";
+                displayMessages(); // Refresh the messages
+            } else {
+                console.error('Failed to submit message:', result);
+                alert("Failed to submit message.");
+            }
+        } else {
+            alert("Message cannot be empty.");
+        }
+    }
+
+    // Event listeners
+    document.addEventListener("DOMContentLoaded", () => {
+        const chatForm = document.getElementById("chatForm");
+        chatForm.addEventListener("submit", async (e) => {
+            e.preventDefault(); // Prevent page refresh
+            await submitMessage();
+        });
+        
+        // Initial display of messages
+        displayMessages();
+    });
+</script>
