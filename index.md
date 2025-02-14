@@ -73,36 +73,29 @@ menu: nav/home.html
  <!-- Featured Cars Section -->
  <section id="featured-cars" class="py-20 bg-gray-100">
         <h2 class="text-7xl font-bold text-center text-red-600 mb-10 fade-in">Featured Cars</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 container mx-auto fade-in">
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
-                <img src="images/resized-enshot20240607080120png.png" alt="Gas Car" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h3 class="text-3xl font-bold mb-2">Gas Car</h3>
-                    <p class="text-xl text-gray-700">The timeless classic fueled by gasoline, offering reliability and power.</p>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <a href="{{site.baseurl}}/gas" class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
+                    <img src="images/resized-enshot20240607080120png.png" alt="Gas Car" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-3xl font-bold mb-2">Gas Car</h3>
+                        <p class="text-xl text-gray-700">The timeless classic fueled by gasoline, offering reliability and power.</p>
+                    </div>
+                </a>
+                <a href="{{site.baseurl}}/electric" class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
+                    <img src="https://blog.vipautoaccessories.com/wp-content/uploads/2024/08/2024_Super-Chrome-Red-Gloss-Wrap_0Hero2.jpg" alt="Electric Car" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-3xl font-bold mb-2">Electric Car</h3>
+                        <p class="text-xl text-gray-700">Maximum efficiency and eco-friendliness, quick acceleration and futuristic design.</p>
+                    </div>
+                </a>
+                <a href="{{site.baseurl}}/dream-car" class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
+                    <img src="images/964355023c8621887c37e1fcc3c1dc3aa9-koeniggsegg-one1.2x.h473.w710.png" alt="Dream Car" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-3xl font-bold mb-2">Dream Car</h3>
+                        <p class="text-xl text-gray-700">A hypercar designed for the ultimate driving experience.</p>
+                    </div>
+                </a>
             </div>
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
-                <img src="images/5f5f966f7ed0ee001e25f20e.png" alt="Hybrid Car" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h3 class="text-3xl font-bold mb-2">Hybrid Car</h3>
-                    <p class="text-xl text-gray-700">A perfect blend of fuel efficiency and eco-friendliness.</p>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
-                <img src="images/Tesla-Model-S-Ultra-Red-2023.jpg" alt="Electric Car" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h3 class="text-3xl font-bold mb-2">Electric Car</h3>
-                    <p class="text-xl text-gray-700">The future of transportation, powered by clean and sustainable energy.</p>
-                </div>
-            </div>
-            <a href="{{site.baseurl}}/dream-car" class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:scale-105">
-                <img src="images/964355023c8621887c37e1fcc3c1dc3aa9-koeniggsegg-one1.2x.h473.w710.png" alt="Dream Car" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h3 class="text-3xl font-bold mb-2">Dream Car</h3>
-                    <p class="text-xl text-gray-700">A hypercar designed for the ultimate driving experience.</p>
-                </div>
-            </a>
-        </div>
     </section>
 
 <!-- Testimonials Section -->
