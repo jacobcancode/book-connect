@@ -5,6 +5,42 @@ search_exclude: true
 menu: nav/home.html
 ---
 
+<!-- Loading Screen -->
+<div id="loading-screen" class="fixed inset-0 bg-gray-200 flex items-center justify-center z-50">
+    <div class="text-center">
+        <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32 mb-4"></div>
+        <h2 class="text-4xl font-semibold text-gray-900">Loading...</h2>
+    </div>
+</div>
+
+<style>
+    .loader {
+        border-top-color: #3498db;
+        animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const loadingScreen = document.getElementById('loading-screen');
+        window.addEventListener('load', function() {
+            loadingScreen.style.display = 'none';
+        });
+        window.addEventListener('beforeunload', function() {
+            loadingScreen.style.display = 'flex';
+        });
+    });
+</script>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
