@@ -144,7 +144,7 @@ permalink: /Chat
             const messageInput = document.getElementById('messageInput');
             const chatBox = document.getElementById('chatBox');
 
-            const apiUrl = 'http://127.0.0.1:8887/car_chat'; // Adjust the port as necessary
+            const apiUrl = 'http://127.0.0.1:8887/car_chat';
 
             // Display a welcoming message in the chat history
             displayMessage({
@@ -205,10 +205,8 @@ permalink: /Chat
                 const messageDiv = document.createElement('div');
                 const timeString = new Date(time).toLocaleTimeString();
                 
-                // Create message container with appropriate class based on message type (sent or received)
                 messageDiv.className = type === 'sent' ? 'sent-message' : 'received-message';
                 
-                // Add message content with user ID, time, and buttons
                 messageDiv.innerHTML = `
                     <div class="message-header">
                         <span class="user-id">${userId}</span>
@@ -226,13 +224,11 @@ permalink: /Chat
                 chatBox.appendChild(messageDiv);
                 chatBox.scrollTop = chatBox.scrollHeight;
 
-                // Add event listener for the edit button if the message is sent by the user
                 if (type === 'sent') {
                     messageDiv.querySelector('.edit-button').addEventListener('click', () => {
                         editMessage(id, text);
                     });
 
-                    // Add event listener for the delete button
                     messageDiv.querySelector('.delete-button').addEventListener('click', () => {
                         deleteMessage(id, messageDiv);
                     });
@@ -241,7 +237,7 @@ permalink: /Chat
 
             function deleteMessage(id, messageDiv) {
                 if (confirm("Are you sure you want to delete this message?")) {
-                    fetch(`http://127.0.0.1:8887/car_chat/${id}`, {
+                    fetch(`${apiUrl}/${id}`, {
                         method: 'DELETE' // Specify the HTTP method as DELETE
                     })
                     .then(response => {
@@ -259,9 +255,8 @@ permalink: /Chat
                 }
             }
 
-            // Function to fetch messages on page load
             function fetchMessages() {
-                fetch('http://127.0.0.1:8887/car_chat', {
+                fetch(apiUrl, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -269,7 +264,7 @@ permalink: /Chat
                 })
                 .then(response => {
                     if (response.ok) {
-                        return response.json(); // Parse the JSON response
+                        return response.json();
                     } else {
                         throw new Error('Failed to fetch messages');
                     }
@@ -278,10 +273,10 @@ permalink: /Chat
                     messages.forEach(msg => {
                         displayMessage({
                             text: msg.message,
-                            type: msg.user_id === 1 ? 'sent' : 'received', // Adjust based on your user ID logic
-                            time: msg.timestamp || new Date(),
-                            userId: msg.user_id || 'Unknown User',
-                            id: msg.id // Include message ID
+                            type: msg.user_id === 1 ? 'sent' : 'received',
+                            time: msg.timestamp ? new Date(msg.timestamp) : new Date(),
+                            userId: msg.username || msg.user_id || 'Unknown User',
+                            id: msg.id
                         });
                     });
                 })
@@ -289,13 +284,13 @@ permalink: /Chat
             }
 
             // Call fetchMessages on page load
-            fetchMessages(); // Fetch messages when the page loads
+            fetchMessages();
 
             function editMessage(id, currentText) {
                 const newText = prompt("Edit your message:", currentText);
                 
                 if (newText !== null && newText.trim() !== "") {
-                    fetch(`http://127.0.0.1:8887/car_chat/${id}`, {
+                    fetch(`${apiUrl}/${id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -304,8 +299,8 @@ permalink: /Chat
                     })
                     .then(response => {
                         if (response.ok) {
-                            const messageDiv = document.querySelector(`.edit-button[data-id="${id}"]`).closest('div');
-                            messageDiv.querySelector('.message-text').textContent = newText; // Update the displayed text
+                            const messageDiv = document.querySelector(`.edit-button[data-id="${id}"]`).closest('.message-text');
+                            messageDiv.textContent = newText;
                         } else {
                             console.error('Error updating message:', response.statusText);
                         }
