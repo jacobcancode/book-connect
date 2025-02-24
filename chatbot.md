@@ -1,5 +1,5 @@
 ---
-layout: base
+layout: needsAuth
 title: Car Expert Chatbot
 permalink: /chatbot
 search_exclude: true
