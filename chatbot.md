@@ -34,7 +34,7 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-  import { login, pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
+  import { pythonURI } from '{{site.baseurl}}/assets/js/api/config.js';
 
   // Load chat history from localStorage
   function loadChatHistory() {
@@ -85,30 +85,19 @@ menu: nav/home.html
 
     userInputField.value = ""; // Clear the input field
 
-    // Define request options
-    const requestOptions = {
-      URL: `${pythonURI}/api/chatbot`,
-      method: "POST",
-      cache: "default",
-      mode: "cors",
-      credentials: "include",
-      body: JSON.stringify({
-        user_input: userInput
-      }),
-      headers: {
+    try {
+      const response = await fetch(`${pythonURI}/api/chatbot`, {
+        method: "POST",
+        cache: "default",
+        mode: "cors",
+        credentials: "include",
+        body: JSON.stringify({
+          user_input: userInput
+        }),
+        headers: {
           'Content-Type': 'application/json',
           'X-Origin': 'client'
-      },
-    };
-
-    try {
-      console.log("Sending request to:", requestOptions.URL);
-
-      const response = await fetch(requestOptions.URL, {
-        method: requestOptions.method,
-        cache: requestOptions.cache,
-        headers: requestOptions.headers,
-        body: requestOptions.body,
+        },
       });
 
       if (!response.ok) {
