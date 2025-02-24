@@ -116,7 +116,7 @@ menu: nav/home.html
       saveChatHistory(userInput, data.model_response || "No response received.");
 
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error");
 
       // Display an error message
       const errorMessageDiv = document.createElement("div");
