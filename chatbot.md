@@ -89,12 +89,15 @@ menu: nav/home.html
     const requestOptions = {
       URL: `${pythonURI}/api/chatbot`,
       method: "POST",
-      cache: "no-cache",
+      cache: "default",
+      mode: "cors",
+      credentials: "include",
       body: JSON.stringify({
         user_input: userInput
       }),
       headers: {
-        "Content-Type": "application/json",
+          'Content-Type': 'application/json',
+          'X-Origin': 'client'
       },
     };
 
