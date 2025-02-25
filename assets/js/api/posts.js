@@ -25,6 +25,25 @@ export async function getPostsByType(carType) {
   }
 }
 
+export async function getPostsByUser(uid) {
+  let endpoint = pythonURI + "/api/carPost";
+
+  try {
+    const response = await fetch(endpoint, fetchOptions);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts: ${response.status}`);
+    }
+    const posts = await response.json();
+
+    console.log(posts);
+
+    return posts.filter((post) => post.user.id === uid);
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
+    return null;
+  }
+}
+
 export async function getImagesByPostId(postId) {
   const endpoint = pythonURI + "/api/carPost/" + postId + "/images";
 
