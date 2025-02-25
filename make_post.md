@@ -83,14 +83,18 @@ permalink: /make_post
       })
     }
 
-    createPost({
+    const created = await createPost({
       title: document.getElementById('title').value,
       description: document.getElementById('description').value,
       car_type: "gas",
       image_base64_table: imageBase64Table
     })
 
-    window.location.href = '{{site.baseurl}}/allPosts'
+    if (created) {
+      window.location.href = '{{site.baseurl}}/allPosts'
+    } else {
+      console.log("ERROR WHEN MAKING POST")
+    }
   }
 
   submitButton.addEventListener('click', submit)

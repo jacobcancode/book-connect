@@ -17,7 +17,7 @@ export async function createUserCar(make, model, year, engine_type, trim, color,
             engine_type: engine_type,
             trim: trim,
             color: color,
-            vin: vin
+            vin: vin,
         }),
     };
 

@@ -1,5 +1,5 @@
 ---
-layout: base
+layout: needsAuth
 title: Car Expert Chatbot
 permalink: /chatbot
 search_exclude: true
@@ -34,7 +34,7 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-  import { login, pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
+  import { pythonURI } from '{{site.baseurl}}/assets/js/api/config.js';
 
   // Load chat history from localStorage
   function loadChatHistory() {
@@ -85,27 +85,19 @@ menu: nav/home.html
 
     userInputField.value = ""; // Clear the input field
 
-    // Define request options
-    const requestOptions = {
-      URL: `${pythonURI}/api/chatbot`,
-      method: "POST",
-      cache: "no-cache",
-      body: JSON.stringify({
-        user_input: userInput
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
     try {
-      console.log("Sending request to:", requestOptions.URL);
-
-      const response = await fetch(requestOptions.URL, {
-        method: requestOptions.method,
-        cache: requestOptions.cache,
-        headers: requestOptions.headers,
-        body: requestOptions.body,
+      const response = await fetch(`${pythonURI}/api/chatbot`, {
+        method: "POST",
+        cache: "default",
+        mode: "cors",
+        credentials: "include",
+        body: JSON.stringify({
+          user_input: userInput
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Origin': 'client'
+        },
       });
 
       if (!response.ok) {
@@ -124,7 +116,7 @@ menu: nav/home.html
       saveChatHistory(userInput, data.model_response || "No response received.");
 
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error");
 
       // Display an error message
       const errorMessageDiv = document.createElement("div");

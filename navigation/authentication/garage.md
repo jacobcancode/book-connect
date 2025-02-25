@@ -6,18 +6,18 @@ search_exclude: true
 menu: nav/home.html 
 ---
 
-<section id="featured-cars" class="pb-20 bg-gray-100 h-screen flex items-center">
-    <div class="w-full grid items-stretch justify-center space-x-4 h-full grid-cols-2">
+<section id="featured-cars" class="pb-20 bg-gray-100 flex items-center justify-center">
+    <div class="w-full grid grid-cols-2 gap-4">
         <!-- Car info card -->
-        <a href="{{site.baseurl}}/car-info" class="h-full bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:shadow-inner">
-            <img src="https://www.youcallwehaul.com/wordpress/wp-content/uploads/2020/12/Car-Facts-05.jpg" alt="Car Information Form" class="w-full h-3/4 object-cover">
+        <a href="{{site.baseurl}}/car-info" class="w-full h-full bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:shadow-inner">
+            <img src="https://ymimg1.b8cdn.com/uploads/article/3588/pictures/2683140/Koenigsegg_Agera_RS_Naraya__5_.jpg" alt="Car Information Form" class="w-full h-3/4 object-cover">
             <div class="p-6">
                 <h3 class="text-3xl font-bold mb-2">Car Information Form</h3>
                 <p class="text-xl text-gray-700">Add your dream car to the garage!</p>
             </div>
         </a>
         <!-- Car info card -->
-        <a href="{{site.baseurl}}/vinStore" class="h-full bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:shadow-inner">
+        <a href="{{site.baseurl}}/vinStore" class="w-full h-full bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-500 hover:shadow-inner">
             <img src="https://www.shutterstock.com/image-vector/add-new-car-icon-600nw-2086317895.jpg" alt="Add Car" class="w-full h-3/4 object-cover">
             <div class="p-6">
                 <h3 class="text-3xl font-bold mb-2">Add your Car</h3>
@@ -115,11 +115,10 @@ menu: nav/home.html
         const colorCell = document.createElement('td');
         colorCell.className = "py-3 px-4";
         colorCell.textContent = car.color;
-        row.appendChild(colorCell);
+        row.appendChild(colorCell); 
 
         const deleteCell = document.createElement('td');
         deleteCell.className = "py-3 px-4";
-
         // Set a specific width for the delete cell (for example, 50px)
         deleteCell.style.width = "50px";
         row.appendChild(deleteCell);
