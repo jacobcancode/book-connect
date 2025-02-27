@@ -16,6 +16,21 @@ export async function getAllComments() {
   }
 }
 
+export async function getCommentsByPostId(postId) {
+  const endpoint = pythonURI + "/api/carComment/" + postId;
+  try {
+    const response = await fetch(endpoint, fetchOptions);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch comments: ${response.status}`);
+    }
+    const comments = await response.json();
+    return comments;
+  } catch (error) {
+    console.error("Error fetching comments:", error.message);
+    return null;
+  }
+}
+
 export async function postComment(comment) {
   try {
       const response = await fetch(pythonURI+'/api/carComment',
