@@ -74,7 +74,7 @@ export async function deleteChat(id) {
 
 export async function updateChat(id, content) {
   try {
-      const response = await fetch(pythonURI+'/api/carChat  ',
+      const response = await fetch(pythonURI + '/api/carChat',
         { 
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
@@ -87,7 +87,7 @@ export async function updateChat(id, content) {
         },
           body: JSON.stringify({
               id: id,
-              content: content,
+              message: content,
           }),
       });
       if (!response.ok) {
