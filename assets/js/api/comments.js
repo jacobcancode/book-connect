@@ -46,7 +46,7 @@ export async function postComment(comment) {
         },
           body: JSON.stringify({
               content: comment.content,
-              post_id: 1,
+              post_id: comment.post_id,
           }),
       });
       if (!response.ok) {
