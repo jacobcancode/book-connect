@@ -219,7 +219,7 @@ show_reading_time: false
                 </div>
             </div>
 
-            <div class="border-t pt-6">
+<div class="border-t pt-6">
                 <h3 class="text-center text-2xl font-semibold mb-4">User Posts</h3>
                 <div id="user-posts" class="grid grid-cols-3 gap-6"></div>
             </div>
