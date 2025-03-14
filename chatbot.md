@@ -34,7 +34,7 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-  import { pythonURI } from '{{site.baseurl}}/assets/js/api/config.js';
+  import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
   // Load chat history from localStorage
   function loadChatHistory() {

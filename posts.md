@@ -9,6 +9,9 @@ permalink: /allPosts
 
 <script type="module">
 import { getPostsByType, getImagesByPostId, removePostById } from "{{site.baseurl}}/assets/js/api/posts.js";
+import { getCommentsByPostId, postComment } from "{{site.baseurl}}/assets/js/api/comments.js";
+import { pythonURI } from "{{site.baseurl}}/assets/js/api/config.js";
+import { getUserProfile } from "{{site.baseurl}}/assets/js/api/users.js"
 
 const carType = "all";
 const postsContainer = document.getElementById("posts-container");
@@ -56,7 +59,8 @@ getPostsByType(carType).then((posts) => {
         if (dateNowString === dateString) {
           dateString = "Today";
         }
-        const postElement = makePostElement(post.title, post.description, dateString, formattedImages, post.id, post.car_type, post.user.name);
+        const profilePicture = pythonURI + "/uploads/" + post.user.uid + "/" + post.user.pfp
+        const postElement = makePostElement(post.title, post.description, dateString, formattedImages, post.id, post.car_type, post.user.name, profilePicture);
         postsContainer.appendChild(postElement)
       });
     });
@@ -65,7 +69,7 @@ getPostsByType(carType).then((posts) => {
   }
 });
 
-function makePostElement(title, description, date, images, postId, carType, username) {
+function makePostElement(title, description, date, images, postId, carType, username, profilePicture) {
   const postElement = document.createElement("div");
     postElement.className =
       "w-1/3 max-w-xl mx-auto border border-gray-300 rounded-lg shadow-md bg-white";
@@ -80,13 +84,13 @@ function makePostElement(title, description, date, images, postId, carType, user
       </button>
       <!-- Header -->
       <div class="flex items-center px-4 py-2">
+        <img src="${profilePicture}" alt="Profile Picture" class="w-10 h-10 rounded-full border border-gray-300">
         <div class="ml-3">
-          <h3 class="text-lg font-semibold text-gray-900">${title}</h3>
+          <h3 class="text-lg font-semibold text-gray-900">${username}</h3>
           <p class="text-sm text-gray-500">${date}</p>
           <p class="text-sm text-gray-500">${carType.toUpperCase()}</p>
-          <p class="text-sm text-gray-500">${username.toUpperCase()}</p>
         </div>
-      </div>
+      </div>     
       <hr class="border-gray-300">
 
       <!-- Carousel -->
@@ -107,14 +111,92 @@ function makePostElement(title, description, date, images, postId, carType, user
       <div class="px-4 py-2">
         <p class="text-gray-700">${description}</p>
       </div>
-      <hr class="border-gray-300">
+
+      <div class="px-4 py-2">
+        <button id="show-comments-btn-${postId}" class="bg-red-500 text-white px-4 w-full py-1 rounded">Show Comments</button>
+        <div id="comments-section-${postId}" class="hidden mt-4">
+          
+        </div>
+    </div>
+    <hr class="border-gray-300">
     `;
 
     const closeButton = postElement.querySelector(".closeBtn");
     closeButton.addEventListener("click", () => removePost(postId, postElement));
 
+    postElement.querySelector(`#show-comments-btn-${postId}`).addEventListener("click", () => {
+      loadComments(postId, postElement)
+      });   
 
     return postElement;
+}
+
+const loadComments =  async (postId, postElement, loadShowingComments) => {
+  const commentsSection = document.getElementById(`comments-section-${postId}`);
+  if (!loadShowingComments) {
+    commentsSection.classList.toggle("hidden");
+  }
+  if (!commentsSection.classList.contains("hidden")) {
+    postElement.querySelector(`#show-comments-btn-${postId}`).innerHTML = "Hide Comments"
+    const comments = await getCommentsByPostId(postId)
+    console.log(comments)
+    commentsSection.innerHTML = "";
+    comments.map(comment => {
+      const profilePicture = pythonURI + "/uploads/" + comment.user.uid + "/" + comment.user.pfp
+
+      const commentElement = document.createElement("div")
+
+      commentElement.className = "flex items-center space-x-4"
+      commentElement.innerHTML = `
+        <img src="${profilePicture}" alt="Profile Picture" class="w-10 h-10 rounded-full">
+        <div>
+          <p class="font-semibold">${comment.user.name}</p>
+          <p class="text-gray-700">${comment.content}</p>
+        </div>
+      `
+      commentsSection.appendChild(commentElement)
+    // add commentElement to the comments section element
+    })
+
+    const currUser = await getUserProfile()
+
+    if(!currUser) {
+      return
+    }
+
+    console.log(currUser)
+    const profilePicture = pythonURI + "/uploads/" + currUser.uid + "/" + currUser.pfp
+    const makeCommentElement = document.createElement("div")
+    makeCommentElement.className = "flex items-center space-x-4"
+    makeCommentElement.innerHTML = `
+    <div class="flex items-center space-x-4">
+      <img src="${profilePicture}" alt="Profile Picture" class="w-10 h-10 rounded-full">
+      <div>
+        <p class="font-semibold">${currUser.name}</p>
+        <input type="text" class="make-comment-content text-gray-700 bg-white" placeholder="Write a comment..."></input>
+      </div>
+          <button class="submit-comment-btn bg-red-500 text-white px-2 py-1 rounded text-sm">Post Comment</button>  
+      </div>     
+    `
+    const submitCommentBtn = makeCommentElement.querySelector('.submit-comment-btn')
+    const commentContent = makeCommentElement.querySelector('.make-comment-content')
+
+    submitCommentBtn.addEventListener('click', () => {
+        postComment({
+          content: commentContent.value,
+          post_id: postId
+        }).then((comment) => {
+          if (comment.success) {
+            loadComments(postId, postElement, true)
+          }
+        })
+    })
+
+    //make the button work with the api and it is done also update comments when u post one
+    commentsSection.appendChild(makeCommentElement)
+    return
+  }
+  postElement.querySelector(`#show-comments-btn-${postId}`).innerHTML = "Show Comments"
 }
 
 function orderPostByDate(posts) {
