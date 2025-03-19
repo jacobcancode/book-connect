@@ -1,9 +1,9 @@
-title: DNHS Car Flocker
-description: "Social Media for Del Norte High School Cars"
-owner_name: Trevor Vick
-github_username: Tvick22
-github_repo: "personal_flocker_frontend"
-baseurl: "/personal_flocker_frontend"
+title: PCoC
+description: "Poway Website Optimization"
+owner_name: Gavin Copley
+github_username: GavinCopley
+github_repo: "PCoC"
+baseurl: "/PCoC"
 future: true
 remote_theme: jekyll/minima
 minima:

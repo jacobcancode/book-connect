@@ -44,7 +44,7 @@ menu: nav/home.html
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legendary Motorsport</title>
+    <title>PCoC</title>
     <script src="https://cdn.tailwingidcss.com"></script>
     <style>
         /* Fade-in animation */
@@ -79,13 +79,13 @@ menu: nav/home.html
 <!-- Welcome Section -->
  <section id="welcome" class="h-screen flex items-center justify-center text-center bg-gray-900 text-white">
         <h1 class="text-8xl font-extrabold fade-in">
-            Welcome to <span class="text-rose-600">Legendary Motorsport</span>
+            Welcome to <span class="text-indigo-500">PCoC</span>
         </h1>
     </section>
 
 <!-- About Us Section -->
 <section id="about" class="h-screen flex flex-col items-center justify-center text-center">
-        <h2 class="text-7xl font-extrabold text-rose-600 fade-in mb-6">About Us</h2>
+        <h2 class="text-7xl font-extrabold text-indigo-500 fade-in mb-6">About Us</h2>
         <p class="text-3xl text-gray-700 max-w-5xl fade-in">
             Legendary Motorsport is the ultimate social media hub for car enthusiasts! Whether you're looking to share
             your experiences, troubleshoot car issues, or showcase stunning photos of your vehicle, our platform is here
@@ -257,7 +257,7 @@ menu: nav/home.html
 </style>
 
 <!-- Call-to-Action Section -->
-<section id="cta" class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-red-600 to-rose-600 text-white">
+<section id="cta" class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-red-600 to-indigo-500 text-white">
         <h2 class="text-7xl font-bold mb-6 fade-in">Join the Legendary Motorsport Community</h2>
         <p class="text-3xl max-w-4xl text-center mb-8 fade-in">
             Connect with car enthusiasts from around the world, share your experiences, and explore amazing content about cars!

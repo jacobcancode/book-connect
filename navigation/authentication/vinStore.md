@@ -16,7 +16,7 @@ menu: nav/home.html
       <div>
         <label for="vin-input" class="block text-sm/6 font-medium text-gray-900">Add a VIN</label>
         <div class="mt-2">
-          <input type="text" id="vin-input" placeholder="Enter VIN" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-rose-600 sm:text-sm/6">
+          <input type="text" id="vin-input" placeholder="Enter VIN" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
         </div>
       </div>
       <div>
@@ -27,13 +27,13 @@ menu: nav/home.html
       <div>
         <label for="old-vin-input" class="block text-sm/6 font-medium text-gray-900">Current VIN</label>
         <div class="mt-2">
-          <input type="text" id="old-vin-input" placeholder="Enter Current VIN" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-rose-600 sm:text-sm/6">
+          <input type="text" id="old-vin-input" placeholder="Enter Current VIN" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
         </div>
       </div>
       <div>
         <label for="new-vin-input" class="block text-sm/6 font-medium text-gray-900">New VIN</label>
         <div class="mt-2">
-          <input type="text" id="new-vin-input" placeholder="Enter New VIN" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-rose-600 sm:text-sm/6">
+          <input type="text" id="new-vin-input" placeholder="Enter New VIN" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
         </div>
       </div>
       <div>
