@@ -570,36 +570,56 @@ menu: nav/home.html
             }
 
             // Load reading stats
-            const stats = await getReadingStats();
-            if (stats) {
-                document.getElementById('books-read').textContent = stats.booksRead;
-                document.getElementById('reading-streak').textContent = stats.readingStreak;
-                document.getElementById('reading-hours').textContent = stats.readingHours;
-                document.getElementById('books-in-progress').textContent = stats.booksInProgress;
+            try {
+                const stats = await getReadingStats();
+                if (stats) {
+                    document.getElementById('books-read').textContent = stats.booksRead;
+                    document.getElementById('reading-streak').textContent = stats.readingStreak;
+                    document.getElementById('reading-hours').textContent = stats.readingHours;
+                    document.getElementById('books-in-progress').textContent = stats.booksInProgress;
+                }
+            } catch (statsError) {
+                console.error('Error loading reading stats:', statsError);
             }
 
             // Load reading goals
-            const goals = await getReadingGoals();
-            if (goals) {
-                updateGoalProgress(goals);
+            try {
+                const goals = await getReadingGoals();
+                if (goals) {
+                    updateGoalProgress(goals);
+                }
+            } catch (goalsError) {
+                console.error('Error loading reading goals:', goalsError);
             }
 
             // Load book recommendations
-            const recommendations = await getBookRecommendations();
-            if (recommendations) {
-                displayRecommendations(recommendations);
+            try {
+                const recommendations = await getBookRecommendations();
+                if (recommendations) {
+                    displayRecommendations(recommendations);
+                }
+            } catch (recError) {
+                console.error('Error loading recommendations:', recError);
             }
 
             // Load reading history
-            const history = await getReadingHistory();
-            if (history) {
-                displayReadingHistory(history);
+            try {
+                const history = await getReadingHistory();
+                if (history) {
+                    displayReadingHistory(history);
+                }
+            } catch (historyError) {
+                console.error('Error loading reading history:', historyError);
             }
 
             // Load book clubs
-            const clubs = await getBookClubs();
-            if (clubs) {
-                displayBookClubs(clubs);
+            try {
+                const clubs = await getBookClubs();
+                if (clubs) {
+                    displayBookClubs(clubs);
+                }
+            } catch (clubsError) {
+                console.error('Error loading book clubs:', clubsError);
             }
         } catch (error) {
             console.error('Error loading dashboard data:', error);
