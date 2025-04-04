@@ -5,22 +5,7 @@ search_exclude: true
 menu: nav/home.html
 ---
 
-<!-- Loading Screen -->
-<div id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
-    <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-indigo-500"></div>
-</div>
-
 <style>
-    .loader {
-        border-top-color: #3498db;
-        animation: spin 1s infinite linear;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
     /* Enhanced fade-in animation */
     .fade-in {
         opacity: 0;
@@ -464,7 +449,6 @@ menu: nav/home.html
     import { ReadingJournal } from "{{site.baseurl}}/assets/js/features/reading/journal.js";
 
     document.addEventListener('DOMContentLoaded', async function() {
-        const loadingScreen = document.getElementById('loading-screen');
         const publicView = document.getElementById('public-view');
         const dashboardView = document.getElementById('dashboard-view');
         const heroSection = document.getElementById('hero-section');
@@ -492,11 +476,6 @@ menu: nav/home.html
             }
 
             const userData = await response.json();
-            
-            // Hide loading screen
-            if (loadingScreen) {
-                loadingScreen.style.display = 'none';
-            }
             
             if (userData && userData.id) {
                 // User is authenticated
@@ -541,8 +520,6 @@ menu: nav/home.html
             }
         } catch (error) {
             console.error('Error checking authentication:', error);
-            // Ensure loading screen is hidden even if there's an error
-            if (loadingScreen) loadingScreen.style.display = 'none';
             if (publicView) publicView.classList.remove('hidden');
             if (dashboardView) dashboardView.classList.add('hidden');
         }
