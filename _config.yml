@@ -1,9 +1,9 @@
-title: PCoC
-description: "Poway Website Optimization"
-owner_name: Gavin Copley
-github_username: GavinCopley
-github_repo: "PCoC"
-baseurl: "/PCoC"
+title: Book Connect
+description: "Your Personal Reading Companion - Track, Connect, and Enhance Your Reading Journey"
+owner_name: Jacob Zierolf
+github_username: jacobcancode
+github_repo: "book-connect"
+baseurl: "/book-connect"
 future: true
 remote_theme: jekyll/minima
 minima:
@@ -16,9 +16,8 @@ minima:
 plugins:
   - jekyll-remote-theme
 header_pages:
-  - navigation/ai.md
-  - navigation/shared_interests/home.md
-  - navigation/create_and_compete/home.md
-  - navigation/voteforthegoat/home.md
-  - navigation/share_and_care/home.md
-  - navigation/rate_and_relate/home.md
+  - navigation/reading_tools.md
+  - navigation/reading_tracker.md
+  - navigation/book_club.md
+  - navigation/recommendations.md
+  - navigation/profile.md

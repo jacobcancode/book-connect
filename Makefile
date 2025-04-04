@@ -1,5 +1,5 @@
 # Configuration, override port with usage: make PORT=4200
-PORT ?= 4887
+PORT ?= 4888
 REPO_NAME ?= personal_flocker_frontend
 LOG_FILE = /tmp/jekyll$(PORT).log
 

@@ -117,6 +117,7 @@ menu: nav/home.html
             .catch(error => {
                 console.error("Python Database Error:", error);
                 const errorMsg = `Python Database Error: ${error.message}`;
+                document.getElementById("message").textContent = errorMsg;
             });
     }
 

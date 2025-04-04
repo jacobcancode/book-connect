@@ -3,9 +3,9 @@
 >
     <div class="col-span-2 flex gap-x-12 mt-3 justify-self-end" id="link-bar-1">
         <a
-            href="{{site.baseurl}}/dream-car"
+            href="{{site.baseurl}}/Chat"
             class="text-sm/6 font-semibold text-gray-900"
-            >Dream Car</a
+            >Discuss</a
         >
         
             
@@ -47,38 +47,34 @@
     <div
         class="col-span-2 flex gap-x-12 mt-3 justify-self-start"
         id="link-bar-2"
-
+    >
+        <!-- Help dropdown (hover version) -->
+      
         
-           <!-- Help dropdown (hover version) -->
-            <div class="relative group">
-                <a
-                    href="{{site.baseurl}}/help"
-                    class="text-sm/6 font-semibold text-gray-900"
-                    id="help-button"
-                >Safe Computing</a>
-                <div
-                    id="help-dropdown"
-                    class="dropdown-content absolute hidden group-hover:block bg-white shadow-md rounded-lg mt-2 w-40 text-sm font-semibold text-gray-900"
-                >
-                    <a href="{{site.baseurl}}/terms" class="block px-4 py-2">Terms of Service</a>
-                    <a href="{{site.baseurl}}/mechanicsTips" class="block px-4 py-2">Car Issues Post Page</a>
-                    <a href="{{site.baseurl}}/terms" class="block px-4 py-2">Terms of Service</a>
-                </div>
-            </div>
 
+    <!-- Auth Buttons Container - Moved outside link-bar-2 -->
+    <div class="absolute top-4 right-4">
         <a
             id="signup-login"
             href="{{site.baseurl}}/noauth"
-            class="hover:drop-shadow-xl z-10 right-6 absolute text-indigo-500 font-extrabold tracking-tight"
-            >Sign Up | Login</a
-        >
-        <a
-            hidden
-            id="profile"
-            href="{{site.baseurl}}/profile"
-            class="hover:drop-shadow-xl z-10 right-6 absolute text-indigo-500 font-extrabold tracking-tight"
-            >Profile</a
-        >
+            class="hover:drop-shadow-xl text-indigo-500 font-extrabold tracking-tight"
+        >Sign Up | Login</a>
+        
+        <!-- Profile Dropdown -->
+        <div id="profile-dropdown" class="hidden relative group">
+            <button class="hover:drop-shadow-xl text-indigo-500 font-extrabold tracking-tight flex items-center px-2 py-1">
+                <span id="user-name-display">Profile</span>
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-50">
+                <div class="py-1">
+                    <a href="{{site.baseurl}}/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Profile</a>
+                    <a href="{{site.baseurl}}/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Logout</a>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
 
@@ -89,7 +85,29 @@
     } from "{{site.baseurl}}/assets/js/api/config.js";
 
     const loginLink = document.getElementById("signup-login");
-    const profileLink = document.getElementById("profile");
+    const profileDropdown = document.getElementById("profile-dropdown");
+    const userNameDisplay = document.getElementById("user-name-display");
+    let dropdownTimeout;
+
+    // Add hover delay functionality
+    const dropdownMenu = profileDropdown.querySelector('.absolute');
+    const dropdownButton = profileDropdown.querySelector('button');
+
+    function showDropdown() {
+        clearTimeout(dropdownTimeout);
+        dropdownMenu.classList.remove('hidden');
+    }
+
+    function hideDropdown() {
+        dropdownTimeout = setTimeout(() => {
+            dropdownMenu.classList.add('hidden');
+        }, 200); // 200ms delay before hiding
+    }
+
+    dropdownButton.addEventListener('mouseenter', showDropdown);
+    dropdownMenu.addEventListener('mouseenter', showDropdown);
+    dropdownButton.addEventListener('mouseleave', hideDropdown);
+    dropdownMenu.addEventListener('mouseleave', hideDropdown);
 
     document.addEventListener("DOMContentLoaded", () => {
         getCredentials() // Call the function to get credentials
@@ -97,10 +115,14 @@
                 if (data) {
                     //IF DATA THEN THE USER IS AUTHENTICATED/LOGGED IN
                     console.log("LOGGED IN");
-                    loginLink.hidden = true;
-                    profileLink.hidden = false;
+                    loginLink.style.display = 'none';
+                    profileDropdown.style.display = 'block';
+                    userNameDisplay.textContent = data.name || 'Profile';
                 } else {
                     //USER IS NOT AUTHENTICATED/LOGGED IN
+                    console.log("NOT LOGGED IN");
+                    loginLink.style.display = 'inline';
+                    profileDropdown.style.display = 'none';
                 }
             })
             .catch((err) => {
@@ -109,6 +131,7 @@
                 // Handle any errors that occurred during getCredentials
             });
     });
+
     function getCredentials() {
         const URL = pythonURI + "/api/user";
         return fetch(URL, fetchOptions)
@@ -132,3 +155,4 @@
             });
     }
 </script>
+
