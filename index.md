@@ -431,10 +431,7 @@ menu: nav/home.html
 </footer>
 
 <script type="module">
-    import {
-        pythonURI,
-        fetchOptions,
-    } from "{{site.baseurl}}/assets/js/api/config.js";
+    import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
     import {
         getCurrentlyReading,
         getReadingStats,
@@ -443,10 +440,10 @@ menu: nav/home.html
         getReadingHistory,
         getBookClubs,
         updateReadingProgress
-    } from "{{site.baseurl}}/assets/js/api/books.js";
-    import { ReadingTimer } from "{{site.baseurl}}/assets/js/features/reading/timer.js";
-    import { ReadingSpeedCalculator } from "{{site.baseurl}}/assets/js/features/reading/speedCalculator.js";
-    import { ReadingJournal } from "{{site.baseurl}}/assets/js/features/reading/journal.js";
+    } from '{{site.baseurl}}/assets/js/api/books.js';
+    import { ReadingTimer } from '{{site.baseurl}}/assets/js/features/reading/timer.js';
+    import { ReadingSpeedCalculator } from '{{site.baseurl}}/assets/js/features/reading/speedCalculator.js';
+    import { ReadingJournal } from '{{site.baseurl}}/assets/js/features/reading/journal.js';
 
     document.addEventListener('DOMContentLoaded', async function() {
         const publicView = document.getElementById('public-view');

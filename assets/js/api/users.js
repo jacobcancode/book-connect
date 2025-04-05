@@ -1,4 +1,4 @@
-import { pythonURI, fetchOptions } from './config.js';
+import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
 export async function getUserProfile() {
     try {
