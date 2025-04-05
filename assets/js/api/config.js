@@ -1,18 +1,10 @@
 export var pythonURI;
 if (location.hostname === "localhost") {
-        pythonURI = "http://localhost:8080";
+        pythonURI = "https://bookconnect-832734119496.us-west1.run.app";
 } else if (location.hostname === "127.0.0.1") {
-        pythonURI = "http://127.0.0.1:8080";
+        pythonURI = "https://bookconnect-832734119496.us-west1.run.app";
 } else {
-        pythonURI =  "https://motor.stu.nighthawkcodingsociety.com";
-}
-export var javaURI;
-if (location.hostname === "localhost") {
-        javaURI = "http://localhost:8080";
-} else if (location.hostname === "127.0.0.1") {
-        javaURI = "http://127.0.0.1:8080";
-} else {
-        javaURI = "https://flocker-j.nighthawkcodingsociety.com";
+        pythonURI =  "https://bookconnect-832734119496.us-west1.run.app";
 }
 
 export const fetchOptions = {
@@ -25,6 +17,7 @@ export const fetchOptions = {
         'Accept': 'application/json'
     }
 };
+
 // User Login Function 
 export function login(options) {
         // Modify the options to use the POST method and include the request body.
