@@ -1,14 +1,11 @@
 // API Configuration
 const config = {
     // API endpoints
-    endpoints: {
-        local: "https://bookconnect-832734119496.us-west1.run.app",  // Using production URL for local testing
-        production: "https://bookconnect-832734119496.us-west1.run.app"
-    },
+    baseUrl: "https://bookconnect-832734119496.us-west1.run.app",
     
     // Get the appropriate API URL based on environment
-    getApiUrl: () => {
-        return config.endpoints.production;  // Always use production URL
+    getApiUrl: (endpoint = '') => {
+        return `${config.baseUrl}${endpoint}`;
     },
 
     // Default request options
@@ -25,13 +22,13 @@ const config = {
 };
 
 // Export the configuration
-export const pythonURI = config.getApiUrl();
+export const pythonURI = config.baseUrl;
 export const fetchOptions = config.getDefaultOptions();
 
 // Login function
 export async function login(credentials) {
     try {
-        const response = await fetch(`${config.getApiUrl()}/api/authenticate`, {
+        const response = await fetch(config.getApiUrl('/api/authenticate'), {
             ...config.getDefaultOptions(),
             method: 'POST',
             body: JSON.stringify(credentials)
