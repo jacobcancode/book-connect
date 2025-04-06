@@ -5,27 +5,32 @@ if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     pythonURI = "https://bookconnect-832734119496.us-west1.run.app";
 }
 
+// Base headers for all requests
+const baseHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
+};
+
 export const fetchOptions = {
     method: 'GET',
     mode: 'cors',
     cache: 'no-cache',
     credentials: 'include',
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || '',
-        'Access-Control-Request-Method': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Request-Headers': 'Content-Type, Authorization, X-Requested-With, Accept, Origin, X-CSRF-Token'
-    }
+    headers: baseHeaders
 };
 
 // User Login Function 
 export async function login(options) {
     const requestOptions = {
-        ...fetchOptions,
         method: options.method,
+        mode: 'cors',
         cache: options.cache,
+        credentials: 'include',
+        headers: {
+            ...baseHeaders,
+            'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+        },
         body: JSON.stringify(options.body)
     };
 

@@ -81,7 +81,11 @@ menu: nav/home.html
         try {
             const response = await fetch(`${pythonURI}/api/user`, {
                 ...fetchOptions,
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    ...fetchOptions.headers,
+                    'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                }
             });
             
             if (!response.ok) {
