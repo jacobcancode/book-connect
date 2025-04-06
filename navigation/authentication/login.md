@@ -15,7 +15,7 @@ menu: nav/home.html
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" id="pythonForm" onsubmit="pythonLogin(); return false;">
+    <form class="space-y-6" id="loginForm" onsubmit="handleLogin(event)">
       <div>
         <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
         <div class="mt-2">
@@ -39,98 +39,37 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-    import { login, pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
+    import { login } from '{{site.baseurl}}/assets/js/api/config.js';
 
-    // Function to handle Python login
-    window.pythonLogin = async function() {
+    // Handle login form submission
+    window.handleLogin = async function(event) {
+        event.preventDefault();
         const messageElement = document.getElementById("message");
         messageElement.textContent = "Logging in...";
         
         try {
-            const requestOptions = {
-                ...fetchOptions,
-                method: "POST",
-                headers: {
-                    ...fetchOptions.headers,
-                    'X-Origin': window.location.origin,
-                    'Access-Control-Allow-Origin': window.location.origin,
-                    'Access-Control-Allow-Credentials': 'true'
-                },
-                body: JSON.stringify({
-                    uid: document.getElementById("username").value,
-                    password: document.getElementById("password").value,
-                })
+            const credentials = {
+                uid: document.getElementById("username").value,
+                password: document.getElementById("password").value
             };
 
-            console.log('Sending request with headers:', requestOptions.headers);
+            const data = await login(credentials);
             
-            const response = await fetch(`${pythonURI}/api/authenticate`, requestOptions);
-            
-            if (!response.ok) {
-                throw new Error(`Login failed: ${response.status} ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            
-            if (data && data.token) {
+            if (data?.token) {
                 // Store token in both localStorage and cookie for consistency
                 localStorage.setItem('token', data.token);
                 document.cookie = `token=${data.token}; path=/; secure; samesite=lax`;
                 
                 // Redirect to profile page
                 window.location.href = '{{site.baseurl}}/profile';
-            } else {
-                throw new Error('No token received in response');
             }
         } catch (error) {
             console.error("Login Error:", error);
-            messageElement.textContent = `Login failed: ${error.message}`;
+            messageElement.textContent = error.message;
         }
-    }
+    };
 
-    // Function to fetch and display Python data
-    async function pythonDatabase() {
-        const messageElement = document.getElementById("message");
-        
-        try {
-            const token = localStorage.getItem('token') || 
-                         document.cookie.split('; ')
-                            .find(row => row.startsWith('token='))
-                            ?.split('=')[1];
-
-            if (!token) {
-                throw new Error('No authentication token found');
-            }
-
-            const requestOptions = {
-                ...fetchOptions,
-                method: 'GET',
-                headers: {
-                    ...fetchOptions.headers,
-                    'X-Origin': window.location.origin,
-                    'Access-Control-Allow-Origin': window.location.origin,
-                    'Access-Control-Allow-Credentials': 'true',
-                    'Authorization': `Bearer ${token}`
-                }
-            };
-
-            console.log('Sending request with headers:', requestOptions.headers);
-            
-            const response = await fetch(`${pythonURI}/api/user`, requestOptions);
-            
-            if (!response.ok) {
-                throw new Error(`Server response: ${response.status} ${response.statusText}`);
-            }
-            
-            const data = await response.json();
-            window.location.href = '{{site.baseurl}}/profile';
-        } catch (error) {
-            console.error("Database Error:", error);
-            messageElement.textContent = `Error: ${error.message}`;
-        }
-    }
-
-    // Check for authentication on page load
+    // Check for existing authentication on page load
     window.onload = function() {
         const token = localStorage.getItem('token') || 
                      document.cookie.split('; ')
@@ -138,7 +77,7 @@ menu: nav/home.html
                         ?.split('=')[1];
                         
         if (token) {
-            pythonDatabase();
+            window.location.href = '{{site.baseurl}}/profile';
         }
     };
 </script>
