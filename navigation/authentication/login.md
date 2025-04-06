@@ -79,12 +79,25 @@ menu: nav/home.html
         const messageElement = document.getElementById("message");
         
         try {
+            const token = localStorage.getItem('token') || 
+                         document.cookie.split('; ')
+                            .find(row => row.startsWith('token='))
+                            ?.split('=')[1];
+
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
             const response = await fetch(`${pythonURI}/api/user`, {
-                ...fetchOptions,
                 method: 'GET',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'include',
                 headers: {
-                    ...fetchOptions.headers,
-                    'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Authorization': `Bearer ${token}`
                 }
             });
             
