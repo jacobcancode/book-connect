@@ -1,77 +1,66 @@
 import { fetchOptions, pythonURI } from "./config.js";
 
 export async function createUserCar(make, model, year, engine_type, trim, color, vin) {
-    const postOptions = {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        cache: "default", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "include", // include, same-origin, omit
-        headers: {
-          "Content-Type": "application/json",
-          "X-Origin": "client", // New custom header to identify source
-        },
+    const endpoint = `${pythonURI}/api/userCars`;
+    const requestOptions = {
+        ...fetchOptions,
+        method: 'POST',
         body: JSON.stringify({
-            make: make,
-            model: model,
-            year: year,
-            engine_type: engine_type,
-            trim: trim,
-            color: color,
-            vin: vin,
-        }),
+            make,
+            model,
+            year,
+            engine_type,
+            trim,
+            color,
+            vin
+        })
     };
 
-    const endpoint = pythonURI + '/api/userCars';
-
     try {
-        const response = await fetch(endpoint, postOptions);
+        const response = await fetch(endpoint, requestOptions);
         if (!response.ok) {
-          throw new Error(`Failed to fetch posts: ${response.status}`);
+            throw new Error(`Failed to create car: ${response.status}`);
         }
-        const posts = await response.json();
-        return posts;
+        const data = await response.json();
+        return data;
     } catch (error) {
-        console.error("Error fetching posts:", error.message);
+        console.error("Error creating car:", error.message);
         return null;
     }
 }
 
 export async function getUserCars() {
-    const endpoint = pythonURI + '/api/userCars';
+    const endpoint = `${pythonURI}/api/userCars`;
     try {
-        const response = await fetch(endpoint, fetchOptions);
+        const response = await fetch(endpoint, {
+            ...fetchOptions,
+            method: 'GET'
+        });
+        
         if (!response.ok) {
-          throw new Error(`Failed to fetch posts: ${response.status}`);
+            throw new Error(`Failed to fetch cars: ${response.status}`);
         }
-        const posts = await response.json();
-        return posts;
+        
+        const cars = await response.json();
+        return cars;
     } catch (error) {
-        console.error("Error fetching posts:", error.message);
+        console.error("Error fetching cars:", error.message);
         return null;
     }
 }
 
 export async function deleteCarById(id) {
-    const endpoint = pythonURI + '/api/userCars';
-    const deleteOptions = {
-        method: "DELETE", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        cache: "default", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "include", // include, same-origin, omit
-        headers: {
-          "Content-Type": "application/json",
-          "X-Origin": "client", // New custom header to identify source
-        },
-        body: JSON.stringify({
-          id: id,
-        }),
-      };
-      console.log(deleteOptions);
+    const endpoint = `${pythonURI}/api/userCars`;
+    const requestOptions = {
+        ...fetchOptions,
+        method: 'DELETE',
+        body: JSON.stringify({ id })
+    };
+
     try {
-        const response = await fetch(endpoint, deleteOptions);
+        const response = await fetch(endpoint, requestOptions);
         if (!response.ok) {
-          console.error(`Failed to delete car: ${response.status}`);
-          return false;
+            throw new Error(`Failed to delete car: ${response.status}`);
         }
         return true;
     } catch (error) {

@@ -1,16 +1,21 @@
 import { fetchOptions, pythonURI } from "./config.js";
 
 export async function getListings() {
-    const endpoint = pythonURI + "/api/fetchListings"
+    const endpoint = `${pythonURI}/api/fetchListings`;
     try {
-        const response = await fetch(endpoint, fetchOptions)
+        const response = await fetch(endpoint, {
+            ...fetchOptions,
+            method: 'GET'
+        });
+        
         if (!response.ok) {
-            throw new error('Failed to fetch listings:' + response.status)
+            throw new Error(`Failed to fetch listings: ${response.status}`);
         }
-        const listings = await response.json()
-        return listings
-    } catch {
-        console.error("Error fetching listings"+ error.message)
-        return null
+        
+        const listings = await response.json();
+        return listings;
+    } catch (error) {
+        console.error("Error fetching listings:", error.message);
+        return null;
     }
 }
