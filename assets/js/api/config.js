@@ -13,12 +13,15 @@ export const fetchOptions = {
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || '',
+        'Access-Control-Request-Method': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Request-Headers': 'Content-Type, Authorization, X-Requested-With, Accept, Origin, X-CSRF-Token'
     }
 };
 
 // User Login Function 
-export function login(options) {
+export async function login(options) {
     const requestOptions = {
         ...fetchOptions,
         method: options.method,
@@ -27,35 +30,48 @@ export function login(options) {
     };
 
     // Clear the message area
-    document.getElementById(options.message).textContent = "";
+    if (options.message) {
+        document.getElementById(options.message).textContent = "";
+    }
 
-    // Fetch JWT
-    fetch(options.URL, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 401) {
-                    throw new Error('Invalid credentials');
-                } else if (response.status === 403) {
-                    throw new Error('Access forbidden');
-                } else if (response.status === 404) {
-                    throw new Error('Endpoint not found');
-                } else {
-                    throw new Error(`Server error: ${response.status}`);
-                }
+    try {
+        const response = await fetch(options.URL, requestOptions);
+        
+        if (!response.ok) {
+            let errorMessage;
+            switch (response.status) {
+                case 401:
+                    errorMessage = 'Invalid username or password';
+                    break;
+                case 403:
+                    errorMessage = 'Access forbidden. Please try logging in again';
+                    break;
+                case 404:
+                    errorMessage = 'Login endpoint not found';
+                    break;
+                case 500:
+                    errorMessage = 'Server error. Please try again later';
+                    break;
+                default:
+                    errorMessage = `Login failed: ${response.status}`;
             }
-            return response.json();
-        })
-        .then(data => {
-            if (data && data.token) {
-                // Store the token if provided
-                localStorage.setItem('auth_token', data.token);
-            }
-            options.callback();
-        })
-        .catch(error => {
-            console.error('Login error:', error);
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+        
+        if (!data || !data.token) {
+            throw new Error('No authentication token received');
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Login error:', error);
+        if (options.message) {
             document.getElementById(options.message).textContent = error.message;
-        });
+        }
+        throw error;
+    }
 }
 
 

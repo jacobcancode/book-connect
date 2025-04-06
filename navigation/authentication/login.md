@@ -6,6 +6,9 @@ search_exclude: true
 menu: nav/home.html
 ---
 
+<!-- Add CSRF token meta tag -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
     <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
@@ -39,93 +42,68 @@ menu: nav/home.html
     import { login, pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
     // Function to handle Python login
-    window.pythonLogin = function() {
-        const options = {
-            URL: `${pythonURI}/api/authenticate`,
-            callback: pythonDatabase,
-            message: "message",
-            method: "POST",
-            cache: "no-cache",
-            body: {
-                uid: document.getElementById("username").value,
-                password: document.getElementById("password").value,
+    window.pythonLogin = async function() {
+        const messageElement = document.getElementById("message");
+        messageElement.textContent = "Logging in...";
+        
+        try {
+            const options = {
+                URL: `${pythonURI}/api/authenticate`,
+                message: "message",
+                method: "POST",
+                cache: "no-cache",
+                body: {
+                    uid: document.getElementById("username").value,
+                    password: document.getElementById("password").value,
+                }
+            };
+            
+            const response = await login(options);
+            
+            if (response && response.token) {
+                // Store token in both localStorage and cookie for consistency
+                localStorage.setItem('token', response.token);
+                document.cookie = `token=${response.token}; path=/; secure; samesite=lax`;
+                
+                // Redirect to profile page
+                window.location.href = '{{site.baseurl}}/profile';
             }
-        };
-        login(options);
-    }
-
-    // Function to handle signup
-    window.signup = function() {
-        const signupButton = document.querySelector(".signup-card button");
-
-        // Disable the button and change its color
-        signupButton.disabled = true;
-        signupButton.style.backgroundColor = '#d3d3d3'; // Light gray to indicate disabled state
-
-        const signupOptions = {
-            URL: `${pythonURI}/api/user`,
-            method: "POST",
-            cache: "no-cache",
-            body: {
-                name: document.getElementById("name").value,
-                username: document.getElementById("signupUsername").value,
-                password: document.getElementById("signupPassword").value,
-            }
-        };
-
-        fetch(signupOptions.URL, {
-            method: signupOptions.method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(signupOptions.body)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Signup failed: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById("signupMessage").textContent = "Signup successful!";
-            // Optionally redirect to login page or handle as needed
-            // window.location.href = '{{site.baseurl}}/profile';
-        })
-        .catch(error => {
-            console.error("Signup Error:", error);
-            document.getElementById("signupMessage").textContent = `Signup Error: ${error.message}`;
-            // Re-enable the button if there is an error
-            signupButton.disabled = false;
-            signupButton.style.backgroundColor = ''; // Reset to default color
-        });
+        } catch (error) {
+            console.error("Login Error:", error);
+            messageElement.textContent = `Login failed: ${error.message}`;
+        }
     }
 
     // Function to fetch and display Python data
-    function pythonDatabase() {
-        const URL = `${pythonURI}/api/user`;
-
-        fetch(URL, fetchOptions)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Flask server response: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                window.location.href = '{{site.baseurl}}/profile';
-            })
-            .catch(error => {
-                console.error("Python Database Error:", error);
-                const errorMsg = `Python Database Error: ${error.message}`;
-                document.getElementById("message").textContent = errorMsg;
+    async function pythonDatabase() {
+        const messageElement = document.getElementById("message");
+        
+        try {
+            const response = await fetch(`${pythonURI}/api/user`, {
+                ...fetchOptions,
+                method: 'GET'
             });
+            
+            if (!response.ok) {
+                throw new Error(`Server response: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            window.location.href = '{{site.baseurl}}/profile';
+        } catch (error) {
+            console.error("Database Error:", error);
+            messageElement.textContent = `Error: ${error.message}`;
+        }
     }
 
-    // Check for cookies and call relevant database functions on page load
+    // Check for authentication on page load
     window.onload = function() {
-        // Check if user is authenticated by checking cookies or local storage
-        const isAuthenticated = document.cookie.includes('auth_token'); // Example check
-        if (isAuthenticated) {
+        const token = localStorage.getItem('token') || 
+                     document.cookie.split('; ')
+                        .find(row => row.startsWith('token='))
+                        ?.split('=')[1];
+                        
+        if (token) {
             pythonDatabase();
         }
     };
