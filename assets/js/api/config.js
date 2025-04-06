@@ -10,11 +10,7 @@ const baseHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
-    'X-Origin': 'client',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Requested-With,X-Origin',
-    'Access-Control-Allow-Credentials': 'true'
+    'X-Origin': window.location.origin
 };
 
 export const fetchOptions = {
