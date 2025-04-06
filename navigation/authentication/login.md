@@ -39,7 +39,7 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-    import { login } from '{{site.baseurl}}/assets/js/api/config.js';
+    import { login, pythonURI } from '{{site.baseurl}}/assets/js/api/config.js';
 
     // Handle login form submission
     window.handleLogin = async function(event) {
@@ -53,6 +53,7 @@ menu: nav/home.html
                 password: document.getElementById("password").value
             };
 
+            console.log('Attempting login to:', pythonURI);
             const data = await login(credentials);
             
             if (data?.token) {

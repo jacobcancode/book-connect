@@ -5,7 +5,9 @@ const config = {
     
     // Get the appropriate API URL based on environment
     getApiUrl: (endpoint = '') => {
-        return `${config.baseUrl}${endpoint}`;
+        const url = `${config.baseUrl}${endpoint}`;
+        console.log('Constructed URL:', url);
+        return url;
     },
 
     // Default request options
@@ -27,8 +29,11 @@ export const fetchOptions = config.getDefaultOptions();
 
 // Login function
 export async function login(credentials) {
+    const url = config.getApiUrl('/api/authenticate');
+    console.log('Login URL:', url);
+    
     try {
-        const response = await fetch(config.getApiUrl('/api/authenticate'), {
+        const response = await fetch(url, {
             ...config.getDefaultOptions(),
             method: 'POST',
             body: JSON.stringify(credentials)
