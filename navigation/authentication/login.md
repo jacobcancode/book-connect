@@ -56,7 +56,9 @@ menu: nav/home.html
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-Origin': 'client'
+                    'X-Origin': window.location.origin,
+                    'Access-Control-Allow-Origin': window.location.origin,
+                    'Access-Control-Allow-Credentials': 'true'
                 },
                 body: {
                     uid: document.getElementById("username").value,
@@ -103,7 +105,9 @@ menu: nav/home.html
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-Origin': 'client',
+                    'X-Origin': window.location.origin,
+                    'Access-Control-Allow-Origin': window.location.origin,
+                    'Access-Control-Allow-Credentials': 'true',
                     'Authorization': `Bearer ${token}`
                 }
             });
