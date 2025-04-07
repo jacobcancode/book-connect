@@ -10,15 +10,25 @@ const config = {
         return url;
     },
 
-    // Default request options
+    // Default request options for unauthenticated requests
     getDefaultOptions: () => ({
         method: 'GET',
         mode: 'cors',
-        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
+            'Origin': window.location.origin
+        }
+    }),
+
+    // Request options for authenticated requests
+    getAuthOptions: (token) => ({
+        ...config.getDefaultOptions(),
+        credentials: 'include',
+        headers: {
+            ...config.getDefaultOptions().headers,
+            'Authorization': `Bearer ${token}`
         }
     })
 };
@@ -62,6 +72,30 @@ export async function login(credentials) {
     }
 }
 
+// Function to make authenticated requests
+export async function authenticatedRequest(endpoint, options = {}) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('No authentication token found');
+    }
+
+    const url = config.getApiUrl(endpoint);
+    const requestOptions = {
+        ...config.getAuthOptions(token),
+        ...options
+    };
+
+    try {
+        const response = await fetch(url, requestOptions);
+        if (!response.ok) {
+            throw new Error(`Request failed: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Request error:', error);
+        throw error;
+    }
+}
 
 // config.js
 
