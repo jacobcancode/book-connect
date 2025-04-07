@@ -21,3 +21,7 @@ header_pages:
   - navigation/book_club.md
   - navigation/recommendations.md
   - navigation/profile.md
+
+Server: https://bookconnect-832734119496.us-west1.run.app
+Domain: bookconnect-832734119496.us-west1.run.app
+Subdomain: bookconnect
