@@ -47,34 +47,40 @@ menu: nav/home.html
         messageElement.textContent = "Logging in...";
         
         try {
-            const options = {
-                URL: `${pythonURI}/api/authenticate`,
-                message: "message",
+            const requestOptions = {
+                ...fetchOptions,
                 method: "POST",
-                cache: "no-cache",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
+                    ...fetchOptions.headers,
                     'X-Origin': window.location.origin,
                     'Access-Control-Allow-Origin': window.location.origin,
                     'Access-Control-Allow-Credentials': 'true'
                 },
-                body: {
+                body: JSON.stringify({
                     uid: document.getElementById("username").value,
                     password: document.getElementById("password").value,
-                }
+                })
             };
+
+            console.log('Sending request with headers:', requestOptions.headers);
             
-            const response = await login(options);
+            const response = await fetch(`${pythonURI}/api/authenticate`, requestOptions);
             
-            if (response && response.token) {
+            if (!response.ok) {
+                throw new Error(`Login failed: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            
+            if (data && data.token) {
                 // Store token in both localStorage and cookie for consistency
-                localStorage.setItem('token', response.token);
-                document.cookie = `token=${response.token}; path=/; secure; samesite=lax`;
+                localStorage.setItem('token', data.token);
+                document.cookie = `token=${data.token}; path=/; secure; samesite=lax`;
                 
                 // Redirect to profile page
                 window.location.href = '{{site.baseurl}}/profile';
+            } else {
+                throw new Error('No token received in response');
             }
         } catch (error) {
             console.error("Login Error:", error);
@@ -96,24 +102,24 @@ menu: nav/home.html
                 throw new Error('No authentication token found');
             }
 
-            const response = await fetch(`${pythonURI}/api/user`, {
+            const requestOptions = {
+                ...fetchOptions,
                 method: 'GET',
-                mode: 'cors',
-                cache: 'no-cache',
-                credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
+                    ...fetchOptions.headers,
                     'X-Origin': window.location.origin,
                     'Access-Control-Allow-Origin': window.location.origin,
                     'Access-Control-Allow-Credentials': 'true',
                     'Authorization': `Bearer ${token}`
                 }
-            });
+            };
+
+            console.log('Sending request with headers:', requestOptions.headers);
+            
+            const response = await fetch(`${pythonURI}/api/user`, requestOptions);
             
             if (!response.ok) {
-                throw new Error(`Server response: ${response.status}`);
+                throw new Error(`Server response: ${response.status} ${response.statusText}`);
             }
             
             const data = await response.json();
