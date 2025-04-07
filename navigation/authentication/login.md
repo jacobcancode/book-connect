@@ -52,6 +52,12 @@ menu: nav/home.html
                 message: "message",
                 method: "POST",
                 cache: "no-cache",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-Origin': 'client'
+                },
                 body: {
                     uid: document.getElementById("username").value,
                     password: document.getElementById("password").value,
@@ -97,6 +103,7 @@ menu: nav/home.html
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
+                    'X-Origin': 'client',
                     'Authorization': `Bearer ${token}`
                 }
             });

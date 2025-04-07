@@ -9,7 +9,8 @@ if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
 const baseHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest'
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-Origin': 'client'
 };
 
 export const fetchOptions = {
@@ -29,7 +30,8 @@ export async function login(options) {
         credentials: 'include',
         headers: {
             ...baseHeaders,
-            'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+            ...options.headers,
+            'Authorization': options.token ? `Bearer ${options.token}` : undefined
         },
         body: JSON.stringify(options.body)
     };
