@@ -2,7 +2,7 @@ export var pythonURI;
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     pythonURI = "http://localhost:4888";
 } else {
-    pythonURI = "https://bookconnect-832734119496.us-west1.run.app";
+    pythonURI = import.meta.env.VITE_API_URL || "https://bookconnect-832734119496.us-west1.run.app";
 }
 
 // Base headers for all requests
@@ -10,7 +10,11 @@ const baseHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
-    'X-Origin': 'client'
+    'X-Origin': import.meta.env.VITE_CORS_ORIGIN || 'client',
+    'Access-Control-Allow-Origin': import.meta.env.VITE_CORS_ORIGIN || '*',
+    'Access-Control-Allow-Methods': import.meta.env.VITE_CORS_METHODS || 'GET,POST,PUT,DELETE,OPTIONS',
+    'Access-Control-Allow-Headers': import.meta.env.VITE_CORS_HEADERS || 'Content-Type,Authorization,X-Requested-With,X-Origin',
+    'Access-Control-Allow-Credentials': 'true'
 };
 
 export const fetchOptions = {

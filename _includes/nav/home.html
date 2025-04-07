@@ -134,7 +134,15 @@
 
     function getCredentials() {
         const URL = pythonURI + "/api/user";
-        return fetch(URL, fetchOptions)
+        return fetch(URL, {
+            ...fetchOptions,
+            headers: {
+                ...fetchOptions.headers,
+                'X-Origin': window.location.origin,
+                'Access-Control-Allow-Origin': window.location.origin,
+                'Access-Control-Allow-Credentials': 'true'
+            }
+        })
             .then((response) => {
                 // API response handler
                 if (response.status !== 200) {
