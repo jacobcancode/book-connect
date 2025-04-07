@@ -39,7 +39,7 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-    import { login, pythonURI } from '{{site.baseurl}}/assets/js/api/config.js';
+    import { login, pythonURI } from '/assets/js/api/config.js';
 
     // Handle login form submission
     window.handleLogin = async function(event) {
@@ -62,7 +62,7 @@ menu: nav/home.html
                 document.cookie = `token=${data.token}; path=/; secure; samesite=lax`;
                 
                 // Redirect to profile page
-                window.location.href = '{{site.baseurl}}/profile';
+                window.location.href = '/profile';
             }
         } catch (error) {
             console.error("Login Error:", error);
@@ -78,7 +78,7 @@ menu: nav/home.html
                         ?.split('=')[1];
                         
         if (token) {
-            window.location.href = '{{site.baseurl}}/profile';
+            window.location.href = '/profile';
         }
     };
 </script>
