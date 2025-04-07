@@ -40,6 +40,9 @@ export async function login(credentials) {
         });
 
         if (!response.ok) {
+            if (response.status === 503) {
+                throw new Error('Service Unavailable: The backend service is currently down. Please try again later.');
+            }
             const error = await response.json().catch(() => ({}));
             throw new Error(error.message || `Login failed: ${response.status}`);
         }
@@ -52,6 +55,9 @@ export async function login(credentials) {
         return data;
     } catch (error) {
         console.error('Login error:', error);
+        if (error.message.includes('Failed to fetch')) {
+            throw new Error('Unable to connect to the server. Please check your internet connection and try again.');
+        }
         throw error;
     }
 }
