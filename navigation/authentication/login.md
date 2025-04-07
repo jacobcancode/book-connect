@@ -39,7 +39,7 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-    import { login, pythonURI } from '../../assets/js/api/config.js';
+    import { login, pythonURI } from "{{site.baseurl}}/assets/js/api/config.js";
 
     // Handle login form submission
     window.handleLogin = async function(event) {
