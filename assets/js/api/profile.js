@@ -1,14 +1,35 @@
-import { fetchOptions, pythonURI } from './config.js';
+import { pythonURI } from './config.js';
+
+// Helper function to get token
+const getToken = () => {
+    return localStorage.getItem('token') || 
+           document.cookie.split('; ')
+              .find(row => row.startsWith('token='))
+              ?.split('=')[1];
+};
+
+// Helper function to create request options
+const createRequestOptions = (method, body = null) => {
+    const token = getToken();
+    return {
+        method,
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-Origin': 'client',
+            ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        ...(body && { body: JSON.stringify(body) })
+    };
+};
 
 // Update User Data with "Put"
 export function putUpdate(options) {
-    const requestOptions = {
-        ...fetchOptions,
-        method: 'PUT',
-        body: JSON.stringify(options.body)
-    };
-
-    fetch(options.URL, requestOptions)
+    fetch(options.URL, createRequestOptions('PUT', options.body))
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
@@ -25,17 +46,11 @@ export function putUpdate(options) {
 
 // Update User Data with "POST" 
 export function postUpdate(options) {
-    const requestOptions = {
-        ...fetchOptions,
-        method: 'POST',
-        body: JSON.stringify(options.body)
-    };
-
     if (options.message) {
         document.getElementById(options.message).textContent = "";
     }
 
-    fetch(options.URL, requestOptions)
+    fetch(options.URL, createRequestOptions('POST', options.body))
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
@@ -51,13 +66,7 @@ export function postUpdate(options) {
 }
 
 export function deleteData(options) {
-    const requestOptions = {
-        ...fetchOptions,
-        method: 'DELETE',
-        body: JSON.stringify(options.body)
-    };
-
-    fetch(options.URL, requestOptions)
+    fetch(options.URL, createRequestOptions('DELETE', options.body))
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
@@ -77,8 +86,7 @@ export async function logoutUser() {
     
     try {
         const response = await fetch(URL, {
-            ...fetchOptions,
-            method: 'DELETE'
+            ...createRequestOptions('DELETE')
         });
         
         if (response.ok) {

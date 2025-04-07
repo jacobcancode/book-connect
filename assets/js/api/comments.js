@@ -1,12 +1,36 @@
-import { fetchOptions, pythonURI } from "./config.js";
+import { pythonURI } from "./config.js";
+
+// Helper function to get token
+const getToken = () => {
+    return localStorage.getItem('token') || 
+           document.cookie.split('; ')
+              .find(row => row.startsWith('token='))
+              ?.split('=')[1];
+};
+
+// Helper function to create request options
+const createRequestOptions = (method, body = null) => {
+    const token = getToken();
+    return {
+        method,
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-Origin': 'client',
+            ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        ...(body && { body: JSON.stringify(body) })
+    };
+};
 
 export async function getAllComments() {
     const endpoint = `${pythonURI}/api/carComment`;
     try {
-        const response = await fetch(endpoint, {
-            ...fetchOptions,
-            method: 'GET'
-        });
+        const response = await fetch(endpoint, createRequestOptions('GET'));
         
         if (!response.ok) {
             throw new Error(`Failed to fetch comments: ${response.status}`);
@@ -23,10 +47,7 @@ export async function getAllComments() {
 export async function getCommentsByPostId(postId) {
     const endpoint = `${pythonURI}/api/carComment/${postId}`;
     try {
-        const response = await fetch(endpoint, {
-            ...fetchOptions,
-            method: 'GET'
-        });
+        const response = await fetch(endpoint, createRequestOptions('GET'));
         
         if (!response.ok) {
             throw new Error(`Failed to fetch comments: ${response.status}`);
@@ -43,8 +64,7 @@ export async function getCommentsByPostId(postId) {
 export async function postComment(comment) {
     const endpoint = `${pythonURI}/api/carComment`;
     const requestOptions = {
-        ...fetchOptions,
-        method: 'POST',
+        ...createRequestOptions('POST'),
         body: JSON.stringify({
             content: comment.content,
             post_id: comment.post_id
@@ -69,8 +89,7 @@ export async function postComment(comment) {
 export async function deleteComment(id) {
     const endpoint = `${pythonURI}/api/carComment`;
     const requestOptions = {
-        ...fetchOptions,
-        method: 'DELETE',
+        ...createRequestOptions('DELETE'),
         body: JSON.stringify({ id })
     };
 
@@ -91,8 +110,7 @@ export async function deleteComment(id) {
 export async function updateComment(id, content) {
     const endpoint = `${pythonURI}/api/carComment`;
     const requestOptions = {
-        ...fetchOptions,
-        method: 'PUT',
+        ...createRequestOptions('PUT'),
         body: JSON.stringify({ id, content })
     };
 

@@ -1,3 +1,41 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build output
+dist/
+build/
+_site/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
 _site
 *.pyc
 __pycache__/
@@ -8,8 +46,6 @@ _posts/**/*_GithubPR.md
 _posts/**/*-by_author.json
 nohup.out
 Gemfile.lock
-node_modules
-.DS_Store
 .env
 _posts/2024-06-25-RDS-and-Flask-Setup-
 venv/

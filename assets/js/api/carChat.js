@@ -1,12 +1,36 @@
-import { fetchOptions, pythonURI } from "./config.js";
+import { pythonURI } from "./config.js";
+
+// Helper function to get token
+const getToken = () => {
+    return localStorage.getItem('token') || 
+           document.cookie.split('; ')
+              .find(row => row.startsWith('token='))
+              ?.split('=')[1];
+};
+
+// Helper function to create request options
+const createRequestOptions = (method, body = null) => {
+    const token = getToken();
+    return {
+        method,
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-Origin': 'client',
+            ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        ...(body && { body: JSON.stringify(body) })
+    };
+};
 
 export async function getAllChat() {
     const endpoint = `${pythonURI}/api/carChat`;
     try {
-        const response = await fetch(endpoint, {
-            ...fetchOptions,
-            method: 'GET'
-        });
+        const response = await fetch(endpoint, createRequestOptions('GET'));
         
         if (!response.ok) {
             throw new Error(`Failed to fetch chat: ${response.status}`);
@@ -22,14 +46,8 @@ export async function getAllChat() {
 
 export async function postChat(content) {
     const endpoint = `${pythonURI}/api/carChat`;
-    const requestOptions = {
-        ...fetchOptions,
-        method: 'POST',
-        body: JSON.stringify({ message: content })
-    };
-
     try {
-        const response = await fetch(endpoint, requestOptions);
+        const response = await fetch(endpoint, createRequestOptions('POST', { message: content }));
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`Failed to post chat: ${response.status} - ${errorText}`);
@@ -46,8 +64,7 @@ export async function postChat(content) {
 export async function deleteChat(id) {
     const endpoint = `${pythonURI}/api/carChat`;
     const requestOptions = {
-        ...fetchOptions,
-        method: 'DELETE',
+        ...createRequestOptions('DELETE'),
         body: JSON.stringify({ id })
     };
 
@@ -68,8 +85,7 @@ export async function deleteChat(id) {
 export async function updateChat(id, content) {
     const endpoint = `${pythonURI}/api/carChat`;
     const requestOptions = {
-        ...fetchOptions,
-        method: 'PUT',
+        ...createRequestOptions('PUT'),
         body: JSON.stringify({ id, message: content })
     };
 
