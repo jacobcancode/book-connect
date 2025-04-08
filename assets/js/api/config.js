@@ -3,6 +3,24 @@ const config = {
     // API endpoints
     baseUrl: "https://bookconnect-832734119496.us-west1.run.app",
     
+    // Token management
+    getToken: () => {
+        return localStorage.getItem('token') || 
+               document.cookie.split('; ')
+                  .find(row => row.startsWith('token='))
+                  ?.split('=')[1];
+    },
+
+    setToken: (token) => {
+        localStorage.setItem('token', token);
+        document.cookie = `token=${token}; path=/; secure; samesite=lax`;
+    },
+
+    clearToken: () => {
+        localStorage.removeItem('token');
+        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=lax';
+    },
+    
     // Get the appropriate API URL based on environment
     getApiUrl: (endpoint = '') => {
         const url = `${config.baseUrl}${endpoint}`;
@@ -72,12 +90,21 @@ export async function login(credentials) {
         const data = await response.json();
         console.log('Login response data:', data);
 
-        if (!data?.token) {
-            console.error('No token in response data:', data);
+        // Check for token in different possible locations
+        const token = data?.token || data?.access_token || data?.jwt;
+        if (!token) {
+            console.error('No token found in response. Response data:', data);
             throw new Error('No authentication token received');
         }
 
-        return data;
+        // Store the token
+        config.setToken(token);
+
+        // Return the token and any other user data
+        return {
+            token,
+            ...data
+        };
     } catch (error) {
         console.error('Login error:', error);
         if (error.message.includes('Failed to fetch')) {
@@ -89,7 +116,7 @@ export async function login(credentials) {
 
 // Function to make authenticated requests
 export async function authenticatedRequest(endpoint, options = {}) {
-    const token = localStorage.getItem('token');
+    const token = config.getToken();
     if (!token) {
         throw new Error('No authentication token found');
     }
@@ -103,6 +130,11 @@ export async function authenticatedRequest(endpoint, options = {}) {
     try {
         const response = await fetch(url, requestOptions);
         if (!response.ok) {
+            if (response.status === 401) {
+                // Token might be expired, clear it
+                config.clearToken();
+                throw new Error('Session expired. Please log in again.');
+            }
             throw new Error(`Request failed: ${response.status}`);
         }
         return await response.json();
@@ -111,6 +143,11 @@ export async function authenticatedRequest(endpoint, options = {}) {
         throw error;
     }
 }
+
+// Export token management functions
+export const getToken = config.getToken;
+export const setToken = config.setToken;
+export const clearToken = config.clearToken;
 
 // config.js
 

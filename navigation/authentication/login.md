@@ -39,7 +39,7 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-    import { login, pythonURI } from "{{site.baseurl}}/assets/js/api/config.js";
+    import { login, getToken, setToken } from "{{site.baseurl}}/assets/js/api/config.js";
 
     // Handle login form submission
     window.handleLogin = async function(event) {
@@ -53,13 +53,11 @@ menu: nav/home.html
                 password: document.getElementById("password").value
             };
 
-            console.log('Attempting login to:', pythonURI);
             const data = await login(credentials);
             
             if (data?.token) {
-                // Store token in both localStorage and cookie for consistency
-                localStorage.setItem('token', data.token);
-                document.cookie = `token=${data.token}; path=/; secure; samesite=lax`;
+                // Store token using the centralized system
+                setToken(data.token);
                 
                 // Redirect to profile page
                 window.location.href = '/profile';
@@ -72,11 +70,7 @@ menu: nav/home.html
 
     // Check for existing authentication on page load
     window.onload = function() {
-        const token = localStorage.getItem('token') || 
-                     document.cookie.split('; ')
-                        .find(row => row.startsWith('token='))
-                        ?.split('=')[1];
-                        
+        const token = getToken();
         if (token) {
             window.location.href = '/profile';
         }
