@@ -41,6 +41,7 @@ export const fetchOptions = config.getDefaultOptions();
 export async function login(credentials) {
     const url = config.getApiUrl('/api/authenticate');
     console.log('Login URL:', url);
+    console.log('Login credentials:', credentials);
     
     try {
         const response = await fetch(url, {
@@ -56,16 +57,23 @@ export async function login(credentials) {
             body: JSON.stringify(credentials)
         });
 
+        console.log('Login response status:', response.status);
+        console.log('Login response headers:', Object.fromEntries(response.headers.entries()));
+
         if (!response.ok) {
             if (response.status === 503) {
                 throw new Error('Service Unavailable: The backend service is currently down. Please try again later.');
             }
-            const error = await response.json().catch(() => ({}));
-            throw new Error(error.message || `Login failed: ${response.status}`);
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Login error response:', errorData);
+            throw new Error(errorData.message || `Login failed: ${response.status}`);
         }
 
         const data = await response.json();
+        console.log('Login response data:', data);
+
         if (!data?.token) {
+            console.error('No token in response data:', data);
             throw new Error('No authentication token received');
         }
 
