@@ -39,7 +39,7 @@ menu: nav/home.html
 </div>
 
 <script type="module">
-    import { login, getToken, setToken } from "{{site.baseurl}}/assets/js/api/config.js";
+    import { login, config } from "{{site.baseurl}}/assets/js/api/config.js";
 
     // Handle login form submission
     window.handleLogin = async function(event) {
@@ -57,7 +57,7 @@ menu: nav/home.html
             
             if (data?.token) {
                 // Store token using the centralized system
-                setToken(data.token);
+                config.setToken(data.token);
                 
                 // Redirect to profile page
                 window.location.href = '/profile';
@@ -70,7 +70,7 @@ menu: nav/home.html
 
     // Check for existing authentication on page load
     window.onload = function() {
-        const token = getToken();
+        const token = config.getToken();
         if (token) {
             window.location.href = '/profile';
         }

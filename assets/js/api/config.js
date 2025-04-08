@@ -54,6 +54,7 @@ const config = {
 // Export the configuration
 export const pythonURI = config.baseUrl;
 export const fetchOptions = config.getDefaultOptions();
+export { config };
 
 // Login function
 export async function login(credentials) {
