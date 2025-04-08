@@ -44,8 +44,15 @@ export async function login(credentials) {
     
     try {
         const response = await fetch(url, {
-            ...config.getDefaultOptions(),
             method: 'POST',
+            mode: 'cors',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Origin': window.location.origin
+            },
             body: JSON.stringify(credentials)
         });
 
